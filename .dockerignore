@@ -1,0 +1,6 @@
+node_modules
+.next
+.git
+*.md
+screenshot_*.png
+ss_*.png
