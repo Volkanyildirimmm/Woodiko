@@ -5,6 +5,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { localBusinessSchema, generateSEO } from '@/lib/seo'
 import Script from 'next/script'
+import { Suspense } from 'react'
 import { PageTracker } from '@/components/shared/PageTracker'
 
 const outfit = Outfit({
@@ -39,7 +40,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
         <Header />
-        <PageTracker />
+        <Suspense fallback={null}>
+          <PageTracker />
+        </Suspense>
         <main className="flex-1">{children}</main>
         <Footer />
       </body>
