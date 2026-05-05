@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --wood-dark: #2C1810;
+    --wood-medium: #5C3A21;
+    --cream: #F5F0E8;
+    --cream-light: #FAF7F2;
+    --gold: #C9A84C;
+    --gold-dark: #A8862F;
+    --charcoal: #1A1410;
+
+    --background: 40 33% 95%;
+    --foreground: 20 30% 12%;
+    --card: 40 33% 97%;
+    --card-foreground: 20 30% 12%;
+    --popover: 40 33% 97%;
+    --popover-foreground: 20 30% 12%;
+    --primary: 26 47% 24%;
+    --primary-foreground: 40 33% 95%;
+    --secondary: 40 33% 92%;
+    --secondary-foreground: 26 47% 24%;
+    --muted: 40 25% 90%;
+    --muted-foreground: 20 20% 45%;
+    --accent: 43 53% 54%;
+    --accent-foreground: 20 30% 12%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 40 20% 85%;
+    --input: 40 20% 85%;
+    --ring: 43 53% 54%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-cream text-wood-dark font-sans antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Custom selection */
+::selection {
+  background-color: #C9A84C;
+  color: #FAF7F2;
+}
