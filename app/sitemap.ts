@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { SITE_URL, SERVICES } from '@/lib/constants'
 import { PROJECTS } from '@/lib/projects'
+import { BLOG_POSTS } from '@/lib/blog-posts'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
@@ -23,20 +24,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }))
 
-  const blogSlugs = [
-    'ankara-mutfak-dolabi-fiyatlari-2024',
-    'kucuk-mutfaklar-icin-dolap-onerileri',
-    'gardirop-ic-duzenlemesi-nasil-yapilir',
-    'mobilya-bakim-rehberi',
-    'yatak-odasi-dekorasyon-trendleri-2024',
-    'banyo-dolabi-secerken-dikkat-edilecekler',
-  ]
-
-  const blogPages: MetadataRoute.Sitemap = blogSlugs.map((slug) => ({
+  const blogPages: MetadataRoute.Sitemap = Object.entries(BLOG_POSTS).map(([slug, post]) => ({
     url: `${SITE_URL}/blog/${slug}`,
-    lastModified: now,
-    changeFrequency: 'yearly' as const,
-    priority: 0.7,
+    lastModified: post.modified ? new Date(post.modified) : new Date(post.date),
+    changeFrequency: 'monthly' as const,
+    priority: 0.75,
   }))
 
   const projectPages: MetadataRoute.Sitemap = PROJECTS.map((p) => ({

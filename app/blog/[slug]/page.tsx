@@ -2,132 +2,14 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Clock, Calendar, ArrowLeft, Share2 } from 'lucide-react'
-import { generateSEO } from '@/lib/seo'
+import Script from 'next/script'
+import { Clock, Calendar, ArrowLeft } from 'lucide-react'
+import { generateSEO, articleSchema, breadcrumbSchema } from '@/lib/seo'
 import { formatDate } from '@/lib/utils'
 import { AnimatedSection } from '@/components/shared/AnimatedSection'
+import { BLOG_POSTS } from '@/lib/blog-posts'
 
-const posts: Record<string, {
-  title: string
-  excerpt: string
-  image: string
-  category: string
-  date: string
-  readTime: string
-  author: string
-  authorImage: string
-  content: string
-  related: string[]
-}> = {
-  'ankara-mutfak-dolabi-fiyatlari-2024': {
-    title: 'Ankara\'da Mutfak Dolabı Fiyatları: 2024 Kapsamlı Rehber',
-    excerpt: 'Ankara\'da mutfak dolabı yaptırmayı düşünüyorsunuz ama fiyatlar hakkında hiçbir fikriniz yok mu?',
-    image: 'https://images.unsplash.com/photo-1556909172-54557c7e4fb7?w=1200&q=80',
-    category: 'Fiyat Rehberi',
-    date: '2024-03-15',
-    readTime: '8 dk okuma',
-    author: 'Woodiko Ekibi',
-    authorImage: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&q=80&fit=crop',
-    related: ['kucuk-mutfaklar-icin-dolap-onerileri', 'mobilya-bakim-rehberi'],
-    content: `
-## Ankara'da Mutfak Dolabı Fiyatlarını Etkileyen Faktörler
-
-Mutfak dolabı fiyatlandırması birçok faktöre bağlıdır. Doğru bütçe planlaması yapabilmek için bu faktörleri anlamak çok önemlidir.
-
-### 1. Kullanılan Malzeme
-
-En büyük maliyet kalemi malzeme seçimidir:
-
-- **MDF kapak (boyalı/lake):** Metrekare başına 6.000–12.000₺
-- **Akrilik kapak:** Metrekare başına 10.000–18.000₺
-- **Alüminyum profil kapak:** Metrekare başına 8.000–15.000₺
-- **Ahşap kaplama:** Metrekare başına 12.000–25.000₺
-
-### 2. Kapak Tipi ve Donanım
-
-Soft-close menteşe ve ray sistemleri fiyatı artırır ama uzun vadede değer yaratır. Blum ve Hettich gibi Avusturya/Alman markaları, yerli muadillerine göre %20–40 daha pahalıdır.
-
-### 3. İç Aksesuar
-
-- Çöp kutusu sistemi: 800–2.500₺
-- Raf organizatörü: 500–1.500₺
-- Köşe dolabı mekanizması (Lemans): 2.500–5.000₺
-
-### Ankara'da Ortalama Mutfak Dolabı Maliyeti
-
-| Mutfak Tipi | Ortalama Maliyet |
-|-------------|-----------------|
-| Standart (10m²) | 60.000–100.000₺ |
-| Orta Segment (10m²) | 100.000–180.000₺ |
-| Premium (10m²) | 180.000–350.000₺ |
-
-### Dikkat Etmeniz Gerekenler
-
-1. **Ölçüm hassasiyeti:** Profesyonel lazer ölçüm şart.
-2. **Garanti belgesi:** Yazılı garanti alın.
-3. **Referanslar:** Daha önce yapılan işleri görün.
-4. **Sözleşme:** Her şey sözleşmeye yazılsın.
-
-Woodiko olarak şeffaf fiyatlandırma politikamızla Ankara'da güvenilir bir tercih olmaya devam ediyoruz.
-    `,
-  },
-  'kucuk-mutfaklar-icin-dolap-onerileri': {
-    title: 'Küçük Mutfaklar İçin 10 Akıllı Dolap Çözümü',
-    excerpt: 'Dar veya küçük bir mutfağınız var ama maksimum depolama alanına ihtiyaç duyuyorsunuz?',
-    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&q=80',
-    category: 'Mutfak',
-    date: '2024-02-28',
-    readTime: '5 dk okuma',
-    author: 'Zeynep Kılıç',
-    authorImage: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&q=80&fit=crop',
-    related: ['ankara-mutfak-dolabi-fiyatlari-2024', 'mobilya-bakim-rehberi'],
-    content: `
-## Küçük Mutfaklarda Alan Kazanmanın 10 Yolu
-
-Küçük bir mutfak, yetersiz depolama alanı anlamına gelmek zorunda değil. Doğru planlama ile her köşeyi değerlendirebilirsiniz.
-
-### 1. Tavan Yüksekliğini Kullanın
-
-Tavan yüksekliğine kadar uzanan üst dolaplar depolama alanınızı dramatik biçimde artırır.
-
-### 2. Köşe Dolabı Çözümleri
-
-Boşa gitmeye meyilli köşeler için "Lemans" veya "Magic Corner" mekanizmaları idealdir.
-
-### 3. Çekme-Dönme Mekanizmalar
-
-Alt dolaplarda çekme-dönme raflar, en arkadaki eşyalara bile rahat ulaşmanızı sağlar.
-
-### 4. Dikey Depolama
-
-Tencereleri yatay değil dikey depolayan özel bölmeler kullanın.
-
-### 5. Duvar Rafları
-
-Açık duvar rafları hem depolama sunar hem de mutfağa görsel derinlik katar.
-
-### 6. Sürgülü Kapılar
-
-Küçük mutfaklarda açılır kapılar çok yer kaplar. Sürgülü dolap kapıları bu sorunu çözer.
-
-### 7. Renk Seçimi
-
-Açık renkler (beyaz, krem, açık gri) mutfağı büyük gösterir.
-
-### 8. Entegre Cihazlar
-
-Fırın, bulaşık makinesi ve buzdolabını dolap içine entegre edin.
-
-### 9. Çok Fonksiyonlu Ada
-
-Küçük bir mutfak adasını hem tezgah hem depolama hem de oturma olarak kullanın.
-
-### 10. Ayna Kullanımı
-
-Bazı kapılarda ayna veya cam kullanmak mekânı görsel olarak büyütür.
-    `,
-  },
-}
+const posts = BLOG_POSTS
 
 export function generateStaticParams() {
   return Object.keys(posts).map((slug) => ({ slug }))
@@ -141,6 +23,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     description: post.excerpt,
     image: post.image,
     path: `/blog/${params.slug}`,
+    keywords: post.keywords,
   })
 }
 
@@ -148,22 +31,36 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const post = posts[params.slug]
   if (!post) notFound()
 
-  const articleSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: post.title,
-    description: post.excerpt,
+  const article = articleSchema({
+    title: post.title,
+    excerpt: post.excerpt,
     image: post.image,
-    datePublished: post.date,
-    author: { '@type': 'Person', name: post.author },
-    publisher: { '@type': 'Organization', name: 'Woodiko' },
-  }
+    date: post.date,
+    modified: post.modified,
+    author: post.author,
+    slug: params.slug,
+  })
+
+  const breadcrumb = breadcrumbSchema([
+    { name: 'Ana Sayfa', path: '/' },
+    { name: 'Blog', path: '/blog' },
+    { name: post.title, path: `/blog/${params.slug}` },
+  ])
 
   const contentLines = post.content.trim().split('\n')
 
   return (
     <div className="pt-20">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <Script
+        id="article-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(article) }}
+      />
+      <Script
+        id="breadcrumb-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+      />
 
       {/* Hero image */}
       <div className="relative h-72 md:h-96 overflow-hidden">
