@@ -8,6 +8,7 @@ import { formatDate } from '@/lib/utils'
 import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/shared/AnimatedSection'
 import { collection, getDocs, query, orderBy } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
+import { BLOG_POSTS } from '@/lib/blog-posts'
 
 interface BlogPost {
   id: string
@@ -26,11 +27,29 @@ export default function BlogPage() {
   const [activeCategory, setActiveCategory] = useState<string>('Tümü')
 
   useEffect(() => {
+    const staticPosts: BlogPost[] = Object.entries(BLOG_POSTS).map(([slug, p]) => ({
+      id: `static-${slug}`,
+      slug,
+      title: p.title,
+      excerpt: p.excerpt,
+      coverImage: p.image,
+      category: p.category || 'Genel',
+      publishedAt: p.modified || p.date,
+      readTime: p.readTime,
+    }))
+
     const fetchBlogs = async () => {
       try {
         const q = query(collection(db, 'blogs'), orderBy('createdAt', 'desc'))
         const snapshot = await getDocs(q)
-        const data = snapshot.docs.map(doc => {
+        const toIso = (v: any): string => {
+          if (!v) return ''
+          if (typeof v === 'string') return v
+          if (typeof v?.toDate === 'function') return v.toDate().toISOString()
+          if (v instanceof Date) return v.toISOString()
+          return String(v)
+        }
+        const fbData = snapshot.docs.map(doc => {
           const rawData = doc.data()
           return {
             id: doc.id,
@@ -39,14 +58,18 @@ export default function BlogPage() {
             excerpt: rawData.excerpt,
             coverImage: rawData.coverImage,
             category: rawData.category || 'Genel',
-            publishedAt: rawData.publishedAt || rawData.createdAt,
-            // Ortalama okuma süresi hesaplanabilir, şimdilik mock
+            publishedAt: toIso(rawData.publishedAt || rawData.createdAt),
             readTime: '5 dk okuma'
           } as BlogPost
         })
-        setPosts(data)
+
+        const seen = new Set(fbData.map(p => p.slug))
+        const merged = [...fbData, ...staticPosts.filter(p => !seen.has(p.slug))]
+        merged.sort((a, b) => (b.publishedAt || '').localeCompare(a.publishedAt || ''))
+        setPosts(merged)
       } catch (error) {
         console.error("Bloglar yüklenirken hata:", error)
+        setPosts(staticPosts)
       } finally {
         setLoading(false)
       }
