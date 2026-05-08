@@ -12,6 +12,16 @@ export function PageTracker() {
   useEffect(() => {
     if (!pathname || pathname.startsWith('/admin')) return
 
+    const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '')
+
+    const w = window as any
+    if (typeof w.gtag === 'function') {
+      w.gtag('event', 'page_view', { page_path: url, page_location: window.location.href })
+    }
+    if (typeof w.fbq === 'function') {
+      w.fbq('track', 'PageView')
+    }
+
     const trackView = async () => {
       try {
         let sessionId = sessionStorage.getItem('woodiko_session')
@@ -19,8 +29,6 @@ export function PageTracker() {
           sessionId = Math.random().toString(36).substring(2, 15)
           sessionStorage.setItem('woodiko_session', sessionId)
         }
-
-        const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '')
 
         await addDoc(collection(db, 'page_views'), {
           path: url,

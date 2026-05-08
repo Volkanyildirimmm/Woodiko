@@ -2,12 +2,15 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Phone, Mail, MapPin, Clock, MessageCircle, Instagram, Facebook } from 'lucide-react'
-import { CONTACT_INFO, SERVICES, SITE_NAME, WHATSAPP_NUMBER } from '@/lib/constants'
+import { Phone, Mail, MapPin, Clock, MessageCircle, Instagram, Facebook, Youtube } from 'lucide-react'
+import { SERVICES, SITE_NAME } from '@/lib/constants'
+import { useSiteSettings } from '@/context/SiteSettingsContext'
 
 export function Footer() {
   const pathname = usePathname()
   const year = new Date().getFullYear()
+  const { contact, social } = useSiteSettings()
+  const waNumber = contact.whatsapp.replace(/\D/g, '')
 
   if (pathname?.startsWith('/admin')) return null
 
@@ -29,33 +32,50 @@ export function Footer() {
               Siteler&apos;deki atölyemizden Ankara&apos;ya kişiye özel mobilya tasarımı ve üretimi yapıyoruz. Yıldırım Mobilya güvencesiyle.
             </p>
             <div className="flex gap-3 pt-1">
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded border border-cream/20 flex items-center justify-center text-cream/60 hover:text-gold hover:border-gold transition-colors"
-                aria-label="Instagram"
-              >
-                <Instagram size={16} />
-              </a>
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded border border-cream/20 flex items-center justify-center text-cream/60 hover:text-gold hover:border-gold transition-colors"
-                aria-label="Facebook"
-              >
-                <Facebook size={16} />
-              </a>
-              <a
-                href={`https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, '')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded border border-cream/20 flex items-center justify-center text-cream/60 hover:text-gold hover:border-gold transition-colors"
-                aria-label="WhatsApp"
-              >
-                <MessageCircle size={16} />
-              </a>
+              {social.instagramUrl && (
+                <a
+                  href={social.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded border border-cream/20 flex items-center justify-center text-cream/60 hover:text-gold hover:border-gold transition-colors"
+                  aria-label="Instagram"
+                >
+                  <Instagram size={16} />
+                </a>
+              )}
+              {social.facebookUrl && (
+                <a
+                  href={social.facebookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded border border-cream/20 flex items-center justify-center text-cream/60 hover:text-gold hover:border-gold transition-colors"
+                  aria-label="Facebook"
+                >
+                  <Facebook size={16} />
+                </a>
+              )}
+              {social.youtubeUrl && (
+                <a
+                  href={social.youtubeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded border border-cream/20 flex items-center justify-center text-cream/60 hover:text-gold hover:border-gold transition-colors"
+                  aria-label="YouTube"
+                >
+                  <Youtube size={16} />
+                </a>
+              )}
+              {waNumber && (
+                <a
+                  href={`https://wa.me/${waNumber}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded border border-cream/20 flex items-center justify-center text-cream/60 hover:text-gold hover:border-gold transition-colors"
+                  aria-label="WhatsApp"
+                >
+                  <MessageCircle size={16} />
+                </a>
+              )}
             </div>
           </div>
 
@@ -105,29 +125,29 @@ export function Footer() {
             <ul className="space-y-3">
               <li className="flex gap-2 text-sm text-cream/60">
                 <MapPin size={14} className="text-gold mt-0.5 shrink-0" />
-                <span>{CONTACT_INFO.address}</span>
+                <span>{contact.address}</span>
               </li>
               <li>
                 <a
-                  href={`tel:${CONTACT_INFO.phone.replace(/\s/g, '')}`}
+                  href={`tel:${contact.phone.replace(/\s/g, '')}`}
                   className="flex gap-2 text-sm text-cream/60 hover:text-gold transition-colors"
                 >
                   <Phone size={14} className="text-gold mt-0.5 shrink-0" />
-                  {CONTACT_INFO.phone}
+                  {contact.phone}
                 </a>
               </li>
               <li>
                 <a
-                  href={`mailto:${CONTACT_INFO.email}`}
+                  href={`mailto:${contact.email}`}
                   className="flex gap-2 text-sm text-cream/60 hover:text-gold transition-colors"
                 >
                   <Mail size={14} className="text-gold mt-0.5 shrink-0" />
-                  {CONTACT_INFO.email}
+                  {contact.email}
                 </a>
               </li>
               <li className="flex gap-2 text-sm text-cream/60">
                 <Clock size={14} className="text-gold mt-0.5 shrink-0" />
-                <span>{CONTACT_INFO.hours}</span>
+                <span>{contact.workingHours}</span>
               </li>
             </ul>
           </div>

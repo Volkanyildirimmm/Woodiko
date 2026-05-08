@@ -3,7 +3,8 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { X, Phone, MessageCircle } from 'lucide-react'
-import { NAV_LINKS, CONTACT_INFO, WHATSAPP_NUMBER } from '@/lib/constants'
+import { NAV_LINKS } from '@/lib/constants'
+import { useSiteSettings } from '@/context/SiteSettingsContext'
 
 interface MobileNavProps {
   open: boolean
@@ -11,6 +12,8 @@ interface MobileNavProps {
 }
 
 export function MobileNav({ open, onClose }: MobileNavProps) {
+  const { contact } = useSiteSettings()
+  const waNumber = contact.whatsapp.replace(/\D/g, '')
   return (
     <AnimatePresence>
       {open && (
@@ -70,7 +73,7 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
                 Ücretsiz Teklif Al
               </Link>
               <a
-                href={`https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, '')}`}
+                href={`https://wa.me/${waNumber}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full py-3 border border-wood-medium text-wood-medium font-semibold rounded hover:bg-wood-medium hover:text-cream transition-colors"
@@ -79,11 +82,11 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
                 WhatsApp
               </a>
               <a
-                href={`tel:${CONTACT_INFO.phone.replace(/\s/g, '')}`}
+                href={`tel:${contact.phone.replace(/\s/g, '')}`}
                 className="flex items-center justify-center gap-2 text-sm text-wood-medium hover:text-wood-dark transition-colors"
               >
                 <Phone size={14} />
-                {CONTACT_INFO.phone}
+                {contact.phone}
               </a>
             </div>
           </motion.div>
