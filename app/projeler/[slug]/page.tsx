@@ -3,18 +3,64 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { MapPin, Clock, Layers, Star, CheckCircle2, ArrowLeft, ArrowRight } from 'lucide-react'
-import { PROJECTS } from '@/lib/projects'
+import { collection, getDocs, query, orderBy } from 'firebase/firestore'
+import { db } from '@/lib/firebase'
+import { PROJECTS, type Project } from '@/lib/projects'
 import { generateSEO } from '@/lib/seo'
 import { formatDate } from '@/lib/utils'
 import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/shared/AnimatedSection'
 import { BeforeAfterSlider } from '@/components/shared/BeforeAfterSlider'
 
-export function generateStaticParams() {
-  return PROJECTS.map((p) => ({ slug: p.slug }))
+export const dynamic = 'force-dynamic'
+
+async function getProjects(): Promise<Project[]> {
+  try {
+    const snapshot = await getDocs(query(collection(db, 'projects'), orderBy('createdAt', 'desc')))
+    const remote = snapshot.docs.map((d) => {
+      const data = d.data() as any
+      const fallback = PROJECTS.find((p) => p.slug === data.slug)
+      return {
+        slug: data.slug || '',
+        title: data.title || fallback?.title || '',
+        location: data.location || fallback?.location || '',
+        category: data.category || fallback?.category || '',
+        style: data.style || fallback?.style || '',
+        duration: data.duration || fallback?.duration || '',
+        area: data.area || fallback?.area || '',
+        summary: data.summary || fallback?.summary || '',
+        challenge: data.challenge || fallback?.challenge || '',
+        solution: data.solution || fallback?.solution || '',
+        materials: Array.isArray(data.materials) && data.materials.length > 0
+          ? data.materials
+          : (fallback?.materials || []),
+        before: {
+          src: data.beforeImage || fallback?.before.src || '',
+          alt: fallback?.before.alt || `${data.title} öncesi`,
+        },
+        after: {
+          src: data.afterImage || fallback?.after.src || '',
+          alt: fallback?.after.alt || `${data.title} sonrası`,
+        },
+        gallery: fallback?.gallery || [],
+        completedAt: data.createdAt || fallback?.completedAt || '',
+        testimonial: fallback?.testimonial,
+      } as Project
+    }).filter((p) => p.slug)
+
+    if (remote.length === 0) return PROJECTS
+
+    const remoteSlugs = new Set(remote.map((p) => p.slug))
+    const staticOnly = PROJECTS.filter((p) => !remoteSlugs.has(p.slug))
+    return [...remote, ...staticOnly]
+  } catch (error) {
+    console.error('Firestore project fetch failed, falling back to static:', error)
+    return PROJECTS
+  }
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const project = PROJECTS.find((p) => p.slug === params.slug)
+  const projects = await getProjects()
+  const project = projects.find((p) => p.slug === params.slug)
   if (!project) return {}
   return generateSEO({
     title: `${project.title} — Önce & Sonra`,
@@ -24,13 +70,14 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   })
 }
 
-export default function ProjeDetayPage({ params }: { params: { slug: string } }) {
-  const project = PROJECTS.find((p) => p.slug === params.slug)
+export default async function ProjeDetayPage({ params }: { params: { slug: string } }) {
+  const projects = await getProjects()
+  const project = projects.find((p) => p.slug === params.slug)
   if (!project) notFound()
 
-  const currentIndex = PROJECTS.findIndex((p) => p.slug === params.slug)
-  const prevProject = PROJECTS[currentIndex - 1]
-  const nextProject = PROJECTS[currentIndex + 1]
+  const currentIndex = projects.findIndex((p) => p.slug === params.slug)
+  const prevProject = projects[currentIndex - 1]
+  const nextProject = projects[currentIndex + 1]
 
   return (
     <div className="pt-20 bg-cream-light">
