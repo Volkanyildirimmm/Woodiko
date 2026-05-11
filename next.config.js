@@ -23,6 +23,22 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   output: "standalone",
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: '(www\\.)?woodiko\\.com\\.tr' }],
+        destination: 'https://woodiko.com/:path*',
+        permanent: true,
+      },
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www\\.woodiko\\.com' }],
+        destination: 'https://woodiko.com/:path*',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

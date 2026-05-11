@@ -59,6 +59,15 @@ export default function NewBlogPage() {
         await uploadBytes(fileRef, file)
         const url = await getDownloadURL(fileRef)
 
+        // İçerik görselini de Galeriye (Medya Kütüphanesine) ekle
+        await addDoc(collection(db, 'gallery'), {
+          title: 'Blog İçerik Görseli',
+          category: 'Blog İçeriği',
+          imageUrl: url,
+          altText: altText || 'Blog Görseli',
+          createdAt: serverTimestamp()
+        })
+
         if (quill && range) {
           // Yükleniyor yazısını sil
           quill.deleteText(range.index, 20)
@@ -131,6 +140,15 @@ export default function NewBlogPage() {
         const fileRef = ref(storage, `blogs/cover_${Date.now()}_${imageFile.name}`)
         await uploadBytes(fileRef, imageFile)
         coverImageUrl = await getDownloadURL(fileRef)
+
+        // Kapak görselini Galeriye (Medya Kütüphanesine) ekle
+        await addDoc(collection(db, 'gallery'), {
+          title: formData.title,
+          category: formData.category,
+          imageUrl: coverImageUrl,
+          altText: formData.coverImageAlt || formData.title,
+          createdAt: serverTimestamp()
+        })
       }
 
       // Etiketleri diziye çevir
@@ -286,7 +304,7 @@ export default function NewBlogPage() {
                   className="w-full px-4 py-2 border border-cream rounded-lg focus:ring-2 focus:ring-blue-400 outline-none text-sm bg-white" 
                   placeholder="https://..."
                 />
-                <p className="text-xs text-wood-medium mt-1">Eğer bu yazı başka bir siteden alıntıysa orijinal URL'yi buraya girin.</p>
+                <p className="text-xs text-wood-medium mt-1">Eğer bu yazı başka bir siteden alıntıysa orijinal URL&apos;yi buraya girin.</p>
               </div>
             </CardContent>
           </Card>

@@ -62,6 +62,15 @@ export default function NewProjectPage() {
         const fileRef = ref(storage, `projects/after_${Date.now()}_${afterFile.name}`)
         await uploadBytes(fileRef, afterFile)
         afterImageUrl = await getDownloadURL(fileRef)
+        
+        // Kapak fotoğrafını otomatik olarak Galeri / Medya kütüphanesine de ekle
+        await addDoc(collection(db, 'gallery'), {
+          title: formData.title,
+          category: formData.category,
+          imageUrl: afterImageUrl,
+          altText: formData.title + ' Woodiko Projesi',
+          createdAt: serverTimestamp()
+        })
       }
 
       // Veritabanına kaydet

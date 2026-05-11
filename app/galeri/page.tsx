@@ -13,6 +13,7 @@ interface GalleryItem {
   imageUrl: string
   title: string
   category: string
+  altText?: string
 }
 
 export default function GaleriPage() {
@@ -100,7 +101,7 @@ export default function GaleriPage() {
                   >
                     <Image
                       src={project.imageUrl}
-                      alt={project.title || 'Woodiko Galeri'}
+                      alt={project.altText || project.title || 'Woodiko Galeri'}
                       width={600}
                       height={i % 3 === 0 ? 500 : 380}
                       className="w-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -141,7 +142,7 @@ export default function GaleriPage() {
             >
               <Image
                 src={filtered[lightboxIndex]?.imageUrl || ''}
-                alt={filtered[lightboxIndex]?.title || 'Büyük görsel'}
+                alt={filtered[lightboxIndex]?.altText || filtered[lightboxIndex]?.title || 'Büyük görsel'}
                 width={1200}
                 height={800}
                 className="w-full h-auto max-h-[80vh] object-contain rounded-xl"

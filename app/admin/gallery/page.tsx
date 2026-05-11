@@ -1,11 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp } from 'firebase/firestore'
+import { collection, addDoc, getDocs, deleteDoc, updateDoc, doc, serverTimestamp } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { db, storage } from '@/lib/firebase'
 import { Card, CardContent } from '@/components/ui/card'
-import { Trash2, UploadCloud, Loader2 } from 'lucide-react'
+import { Trash2, UploadCloud, Loader2, Edit2 } from 'lucide-react'
 import Image from 'next/image'
 
 interface GalleryItem {
@@ -13,6 +13,7 @@ interface GalleryItem {
   imageUrl: string
   title: string
   category: string
+  altText?: string
 }
 
 export default function GalleryAdminPage() {
@@ -62,6 +63,7 @@ export default function GalleryAdminPage() {
         title: formData.title || 'İsimsiz',
         category: formData.category,
         imageUrl: url,
+        altText: formData.title || 'Woodiko Görsel',
         createdAt: serverTimestamp()
       }
 
@@ -90,6 +92,18 @@ export default function GalleryAdminPage() {
         setItems(items.filter(item => item.id !== id))
       } catch (error) {
         console.error('Silinirken hata oluştu:', error)
+      }
+    }
+  }
+
+  const handleEditAlt = async (id: string, currentAlt: string) => {
+    const newAlt = prompt('Görsel için Alt Etiketi (SEO) girin:', currentAlt || '')
+    if (newAlt !== null && newAlt.trim() !== '') {
+      try {
+        await updateDoc(doc(db, 'gallery', id), { altText: newAlt })
+        setItems(items.map(item => item.id === id ? { ...item, altText: newAlt } : item))
+      } catch (error) {
+        console.error('Alt etiket güncellenirken hata:', error)
       }
     }
   }
@@ -171,13 +185,20 @@ export default function GalleryAdminPage() {
                     fill 
                     className="object-cover transition-transform group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-wood-dark/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <div className="absolute inset-0 bg-wood-dark/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                    <button 
+                      onClick={() => handleEditAlt(item.id, item.altText || item.title)}
+                      className="p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-colors shadow-lg"
+                      title="Alt Etiketini Düzenle (SEO)"
+                    >
+                      <Edit2 size={18} />
+                    </button>
                     <button 
                       onClick={() => handleDelete(item.id)}
                       className="p-3 bg-red-600 hover:bg-red-700 text-white rounded-full transition-colors shadow-lg"
                       title="Sil"
                     >
-                      <Trash2 size={20} />
+                      <Trash2 size={18} />
                     </button>
                   </div>
                 </div>
@@ -185,8 +206,8 @@ export default function GalleryAdminPage() {
                   <div className="text-sm font-bold text-wood-dark truncate" title={item.title}>
                     {item.title}
                   </div>
-                  <div className="text-xs text-wood-medium/60 mt-0.5">
-                    {item.category}
+                  <div className="text-xs text-wood-medium/60 mt-0.5 truncate" title={`Alt: ${item.altText || item.title}`}>
+                    Alt: {item.altText || item.title} • {item.category}
                   </div>
                 </div>
               </div>

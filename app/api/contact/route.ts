@@ -14,8 +14,8 @@ export async function POST(req: NextRequest) {
     const data = schema.parse(body)
 
     const apiKey = process.env.RESEND_API_KEY
-    const toEmail = process.env.TO_EMAIL || 'info@woodiko.com.tr'
-    const fromEmail = process.env.FROM_EMAIL || 'noreply@woodiko.com.tr'
+    const toEmail = process.env.TO_EMAIL || 'info@woodiko.com'
+    const fromEmail = process.env.FROM_EMAIL || 'noreply@woodiko.com'
 
     if (apiKey) {
       await fetch('https://api.resend.com/emails', {

@@ -1,5 +1,5 @@
 export const SITE_NAME = 'Woodiko'
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://woodiko.com.tr'
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://woodiko.com'
 export const SITE_DESCRIPTION =
   '1982\'den bu yana Yıldırım Mobilya güvencesiyle Ankara\'da kişiye özel mobilya tasarımı ve üretimi. Mutfak dolabı, yatak odası, gardırop ve banyo dolabı için ücretsiz keşif randevusu alın.'
 export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '+905077347521'
