@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { Phone, Mail, MapPin, Clock, MessageCircle, Instagram, Facebook, Youtube } from 'lucide-react'
 import { SERVICES, SITE_NAME } from '@/lib/constants'
 import { useSiteSettings } from '@/context/SiteSettingsContext'
+import { CONSENT_OPEN_SETTINGS_EVENT } from '@/lib/consent'
 
 export function Footer() {
   const pathname = usePathname()
@@ -157,13 +158,26 @@ export function Footer() {
       <div className="border-t border-cream/10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-cream/40">
           <p>© {year} Yıldırım Mobilya — {SITE_NAME}. Tüm hakları saklıdır.</p>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-4 justify-center sm:justify-end">
+            <Link href="/kvkk-aydinlatma-metni" className="hover:text-cream/60 transition-colors">
+              KVKK Aydınlatma Metni
+            </Link>
+            <Link href="/cerez-politikasi" className="hover:text-cream/60 transition-colors">
+              Çerez Politikası
+            </Link>
             <Link href="/gizlilik-politikasi" className="hover:text-cream/60 transition-colors">
               Gizlilik Politikası
             </Link>
             <Link href="/kullanim-kosullari" className="hover:text-cream/60 transition-colors">
               Kullanım Koşulları
             </Link>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent(CONSENT_OPEN_SETTINGS_EVENT))}
+              className="hover:text-cream/60 transition-colors"
+            >
+              Çerez Ayarları
+            </button>
           </div>
         </div>
       </div>

@@ -7,6 +7,8 @@ import { SERVICES, CONTACT_INFO } from '@/lib/constants'
 import { generateSEO } from '@/lib/seo'
 import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/shared/AnimatedSection'
 import { ServiceProjectsWidget } from './ServiceProjectsWidget'
+import { ServiceViewTracker } from './ServiceViewTracker'
+import { ServiceSchema } from '@/components/schemas/ServiceSchema'
 
 const serviceDetails: Record<string, {
   longDescription: string
@@ -83,7 +85,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return generateSEO({
     title: `${service.title} — Ankara Özel Tasarım`,
     description: `Ankara'da kişiye özel ${service.title.toLowerCase()} tasarımı ve üretimi. ${service.description} Ücretsiz keşif randevusu için hemen teklif alın.`,
-    image: service.image,
+    image: `/og/${service.slug}`,
     path: `/hizmetler/${service.slug}`,
   })
 }
@@ -93,19 +95,15 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
   if (!service) notFound()
   const details = serviceDetails[params.slug]
 
-  const serviceSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: `${service.title} — Woodiko`,
-    description: details.longDescription,
-    provider: { '@type': 'LocalBusiness', name: 'Woodiko' },
-    areaServed: 'Ankara',
-    serviceType: service.title,
-  }
-
   return (
     <div className="pt-20">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
+      <ServiceViewTracker serviceName={service.title} />
+      <ServiceSchema
+        name={service.title}
+        description={details.longDescription}
+        slug={service.slug}
+        image={service.image}
+      />
 
       {/* Hero */}
       <section className="relative h-80 md:h-96 overflow-hidden">

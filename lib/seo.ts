@@ -13,7 +13,7 @@ interface SEOProps {
 export function generateSEO({
   title,
   description = SITE_DESCRIPTION,
-  image = '/og/default.jpg',
+  image = '/og/default',
   noIndex = false,
   path = '',
   keywords,
@@ -108,6 +108,15 @@ export const localBusinessSchema = {
     { '@type': 'AdministrativeArea', name: 'Sincan' },
     { '@type': 'AdministrativeArea', name: 'Pursaklar' },
     { '@type': 'AdministrativeArea', name: 'Gölbaşı' },
+    { '@type': 'Place', name: 'Yaşamkent' },
+    { '@type': 'Place', name: 'Çayyolu' },
+    { '@type': 'Place', name: 'Ümitköy' },
+    { '@type': 'Place', name: 'Bağlıca' },
+    { '@type': 'Place', name: 'İncek' },
+  ],
+  founders: [
+    { '@type': 'Person', name: 'Gazi Yıldırım' },
+    { '@type': 'Person', name: 'Kemal Yıldırım' },
   ],
   openingHoursSpecification: [
     {
@@ -118,7 +127,7 @@ export const localBusinessSchema = {
     },
   ],
   priceRange: '$$$',
-  image: `${SITE_URL}/og/default.jpg`,
+  image: `${SITE_URL}/og/default`,
   logo: `${SITE_URL}/logo.png`,
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
@@ -142,7 +151,7 @@ export const localBusinessSchema = {
     author: { '@type': 'Person', name: t.name },
     reviewBody: t.text,
   })),
-  sameAs: [] as string[], // TODO: Instagram, Facebook, Google Business Profile URL'lerini ekle
+  sameAs: ['https://instagram.com/woodikomobilya'] as string[],
 }
 
 export const organizationSchema = {

@@ -10,6 +10,8 @@ import { PageTracker } from '@/components/shared/PageTracker'
 import { SiteSettingsProvider } from '@/context/SiteSettingsContext'
 import { SiteScripts } from '@/components/shared/SiteScripts'
 import { fetchSiteSettings } from '@/lib/siteSettings'
+import CookieConsent from '@/components/CookieConsent'
+import StickyWhatsApp from '@/components/StickyWhatsApp'
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -76,6 +78,8 @@ export default function RootLayout({
           </Suspense>
           <main className="flex-1">{children}</main>
           <Footer />
+          <StickyWhatsApp />
+          <CookieConsent />
         </SiteSettingsProvider>
       </body>
     </html>

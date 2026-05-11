@@ -9,6 +9,9 @@ import { ChevronLeft, ChevronRight, CheckCircle2, Loader2, MessageCircle } from 
 import { SERVICES, WHATSAPP_NUMBER } from '@/lib/constants'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
+import { trackLead, trackContact } from '@/lib/meta-events'
+import { gaTrackLead, gaTrackContact } from '@/lib/ga-events'
+import { trackGoogleAdsConversion } from '@/lib/google-ads'
 
 const schema = z.object({
   service: z.string().min(1, 'Lütfen bir hizmet seçin'),
@@ -19,6 +22,9 @@ const schema = z.object({
   phone: z.string().min(10, 'Geçerli telefon numarası girin'),
   email: z.string().email('Geçerli e-posta adresi girin'),
   note: z.string().optional(),
+  kvkk: z.literal(true, {
+    errorMap: () => ({ message: 'Devam etmek için KVKK onayı vermelisiniz' }),
+  }),
 })
 
 type FormData = z.infer<typeof schema>
@@ -70,6 +76,18 @@ export function QuoteForm() {
         status: 'yeni',
         createdAt: serverTimestamp()
       })
+
+      const leadPayload = {
+        service: data.service,
+        district: data.district,
+        budget: data.budget,
+        email: data.email,
+        phone: data.phone,
+      }
+      trackLead(leadPayload)
+      gaTrackLead({ service: data.service, district: data.district, budget: data.budget })
+      trackGoogleAdsConversion()
+
       setSubmitted(true)
     } catch (error) {
       console.error('Form gönderilirken hata:', error)
@@ -90,6 +108,10 @@ export function QuoteForm() {
           href={`https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, '')}?text=${waText}`}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => {
+            trackContact({ method: 'whatsapp', surface: 'quote_success' })
+            gaTrackContact('whatsapp_quote_success')
+          }}
           className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
         >
           <MessageCircle size={18} />
@@ -299,6 +321,30 @@ export function QuoteForm() {
                   <span className="font-medium text-wood-dark">{BUDGETS.find((b) => b.value === watchedBudget)?.label}</span>
                 </div>
               </div>
+              <label className="flex items-start gap-3 p-4 bg-cream-light border border-cream rounded-lg cursor-pointer">
+                <input
+                  type="checkbox"
+                  {...register('kvkk')}
+                  className="mt-0.5 w-4 h-4 accent-gold shrink-0"
+                />
+                <span className="text-wood-medium/80 text-xs leading-relaxed">
+                  KVKK kapsamında kişisel verilerimin işlenmesine ve{' '}
+                  <a
+                    href="/kvkk-aydinlatma-metni"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gold hover:underline"
+                  >
+                    Aydınlatma Metni
+                  </a>
+                  &apos;nde belirtilen şekilde kullanılmasına onay veriyorum.{' '}
+                  <span className="text-gold">*</span>
+                </span>
+              </label>
+              {errors.kvkk && (
+                <p className="text-red-500 text-xs mt-1">{errors.kvkk.message as string}</p>
+              )}
+
               <p className="text-wood-medium/60 text-xs leading-relaxed">
                 Formu göndererek <strong>Woodiko</strong>&apos;nun sizi 24 saat içinde aramasını onaylıyorsunuz. Bilgileriniz üçüncü taraflarla paylaşılmaz.
               </p>
