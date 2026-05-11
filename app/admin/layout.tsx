@@ -14,7 +14,8 @@ import {
   LogOut,
   Wrench,
   ExternalLink,
-  Inbox
+  Inbox,
+  MessageSquare
 } from 'lucide-react'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -34,6 +35,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: 'Blog', href: '/admin/blog', icon: FileText },
     { name: 'Projeler', href: '/admin/projects', icon: Briefcase },
     { name: 'Hizmetler', href: '/admin/services', icon: Wrench },
+    { name: 'Yorumlar', href: '/admin/testimonials', icon: MessageSquare },
     { name: 'Galeri', href: '/admin/gallery', icon: Images },
     { name: 'Ayarlar', href: '/admin/settings', icon: Settings },
   ]

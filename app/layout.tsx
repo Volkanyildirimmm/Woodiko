@@ -7,6 +7,9 @@ import { localBusinessSchema, organizationSchema, websiteSchema, generateSEO } f
 import Script from 'next/script'
 import { Suspense } from 'react'
 import { PageTracker } from '@/components/shared/PageTracker'
+import { SiteSettingsProvider } from '@/context/SiteSettingsContext'
+import { SiteScripts } from '@/components/shared/SiteScripts'
+import { fetchSiteSettings } from '@/lib/siteSettings'
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -21,7 +24,23 @@ const montserrat = Montserrat({
   display: 'swap',
 })
 
-export const metadata: Metadata = generateSEO()
+export async function generateMetadata(): Promise<Metadata> {
+  const base = generateSEO()
+  try {
+    const settings = await fetchSiteSettings()
+    const verifyKey = settings.seo.googleSearchConsoleKey.trim()
+    if (verifyKey) {
+      return {
+        ...base,
+        verification: {
+          ...(base.verification || {}),
+          google: verifyKey,
+        },
+      }
+    }
+  } catch {}
+  return base
+}
 
 export default function RootLayout({
   children,
@@ -34,27 +53,30 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className="min-h-screen flex flex-col bg-cream-light">
-        <Script
-          id="local-business-schema"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
-        />
-        <Script
-          id="organization-schema"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-        />
-        <Script
-          id="website-schema"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-        />
-        <Header />
-        <Suspense fallback={null}>
-          <PageTracker />
-        </Suspense>
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <SiteSettingsProvider>
+          <SiteScripts />
+          <Script
+            id="local-business-schema"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+          />
+          <Script
+            id="organization-schema"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+          />
+          <Script
+            id="website-schema"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+          />
+          <Header />
+          <Suspense fallback={null}>
+            <PageTracker />
+          </Suspense>
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </SiteSettingsProvider>
       </body>
     </html>
   )

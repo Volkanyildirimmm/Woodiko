@@ -5,7 +5,7 @@ import { collection, addDoc, getDocs, deleteDoc, updateDoc, doc, serverTimestamp
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { db, storage } from '@/lib/firebase'
 import { Card, CardContent } from '@/components/ui/card'
-import { Trash2, UploadCloud, Loader2, Edit2 } from 'lucide-react'
+import { Trash2, UploadCloud, Loader2, Edit2, Plus, Check } from 'lucide-react'
 import Image from 'next/image'
 
 interface GalleryItem {
@@ -14,6 +14,13 @@ interface GalleryItem {
   title: string
   category: string
   altText?: string
+}
+
+interface SiteImage {
+  url: string
+  source: string
+  defaultTitle: string
+  defaultCategory: string
 }
 
 export default function GalleryAdminPage() {
@@ -27,9 +34,80 @@ export default function GalleryAdminPage() {
     category: 'Mutfak Dolabı'
   })
 
+  const [siteImages, setSiteImages] = useState<SiteImage[]>([])
+  const [siteImagesLoading, setSiteImagesLoading] = useState(true)
+  const [selectedImage, setSelectedImage] = useState<SiteImage | null>(null)
+  const [pickTitle, setPickTitle] = useState('')
+  const [pickCategory, setPickCategory] = useState('Mutfak Dolabı')
+  const [addingFromSite, setAddingFromSite] = useState(false)
+
   useEffect(() => {
     fetchGallery()
+    fetchSiteImages()
   }, [])
+
+  const fetchSiteImages = async () => {
+    try {
+      const collected: SiteImage[] = []
+      const projSnap = await getDocs(collection(db, 'projects'))
+      projSnap.docs.forEach((d) => {
+        const p = d.data() as any
+        if (p.beforeImage) collected.push({ url: p.beforeImage, source: `Proje: ${p.title || p.slug} (Önce)`, defaultTitle: `${p.title || ''} — Önce`.trim(), defaultCategory: p.category || 'Mutfak Dolabı' })
+        if (p.afterImage) collected.push({ url: p.afterImage, source: `Proje: ${p.title || p.slug} (Sonra)`, defaultTitle: `${p.title || ''} — Sonra`.trim(), defaultCategory: p.category || 'Mutfak Dolabı' })
+        if (Array.isArray(p.gallery)) {
+          p.gallery.forEach((url: string, i: number) => {
+            collected.push({ url, source: `Proje: ${p.title || p.slug} (Galeri ${i + 1})`, defaultTitle: `${p.title || ''} — ${i + 1}`.trim(), defaultCategory: p.category || 'Mutfak Dolabı' })
+          })
+        }
+      })
+      const blogSnap = await getDocs(collection(db, 'blogs'))
+      blogSnap.docs.forEach((d) => {
+        const b = d.data() as any
+        if (b.coverImage) collected.push({ url: b.coverImage, source: `Blog: ${b.title || b.slug}`, defaultTitle: b.title || '', defaultCategory: b.category || 'Mutfak Dolabı' })
+      })
+      const seen = new Set<string>()
+      const unique = collected.filter((it) => {
+        if (seen.has(it.url)) return false
+        seen.add(it.url)
+        return true
+      })
+      setSiteImages(unique)
+    } catch (err) {
+      console.error('Site görselleri çekilirken hata:', err)
+    } finally {
+      setSiteImagesLoading(false)
+    }
+  }
+
+  const isAlreadyInGallery = (url: string) => items.some((it) => it.imageUrl === url)
+
+  const selectSiteImage = (img: SiteImage) => {
+    setSelectedImage(img)
+    setPickTitle(img.defaultTitle)
+    setPickCategory(img.defaultCategory)
+  }
+
+  const handleAddFromSite = async () => {
+    if (!selectedImage) return
+    setAddingFromSite(true)
+    try {
+      const newItem = {
+        title: pickTitle || 'İsimsiz',
+        category: pickCategory,
+        imageUrl: selectedImage.url,
+        createdAt: serverTimestamp()
+      }
+      const docRef = await addDoc(collection(db, 'gallery'), newItem)
+      setItems([{ id: docRef.id, ...newItem, createdAt: new Date() } as any, ...items])
+      setSelectedImage(null)
+      setPickTitle('')
+    } catch (err) {
+      console.error('Hata:', err)
+      alert('Galeriye eklerken hata oluştu.')
+    } finally {
+      setAddingFromSite(false)
+    }
+  }
 
   const fetchGallery = async () => {
     try {
@@ -163,6 +241,93 @@ export default function GalleryAdminPage() {
               Yükle
             </button>
           </form>
+        </CardContent>
+      </Card>
+
+      <Card className="border-cream">
+        <CardContent className="p-6 space-y-4">
+          <div>
+            <h3 className="text-xl font-bold text-wood-dark">Site içi görsellerden seç</h3>
+            <p className="text-sm text-wood-medium/70 mt-1">Projelere ve blog yazılarına yüklediğin görseller — tıklayıp başlık ekleyerek galeriye gönder.</p>
+          </div>
+
+          {siteImagesLoading ? (
+            <div className="text-center py-8 text-wood-medium"><Loader2 className="animate-spin inline" size={24} /></div>
+          ) : siteImages.length === 0 ? (
+            <div className="text-center py-8 text-wood-medium/70 text-sm">Proje veya blogda henüz görsel yok.</div>
+          ) : (
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 max-h-[420px] overflow-y-auto p-1">
+              {siteImages.map((img, i) => {
+                const used = isAlreadyInGallery(img.url)
+                const selected = selectedImage?.url === img.url
+                return (
+                  <button
+                    key={img.url + i}
+                    type="button"
+                    onClick={() => selectSiteImage(img)}
+                    title={img.source + (used ? ' — Zaten galeride' : '')}
+                    className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                      selected ? 'border-gold ring-2 ring-gold/40' : used ? 'border-green-500/40 opacity-60' : 'border-cream hover:border-gold/50'
+                    }`}
+                  >
+                    <Image src={img.url} alt={img.source} fill className="object-cover" sizes="120px" />
+                    {used && (
+                      <span className="absolute top-1 right-1 bg-green-600 text-white text-[10px] px-1.5 py-0.5 rounded font-bold flex items-center gap-0.5">
+                        <Check size={10} /> Eklendi
+                      </span>
+                    )}
+                    {selected && (
+                      <span className="absolute inset-0 bg-gold/20 flex items-center justify-center">
+                        <span className="bg-gold text-wood-dark rounded-full p-1.5"><Check size={14} /></span>
+                      </span>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+          )}
+
+          {selectedImage && (
+            <div className="flex flex-col md:flex-row gap-3 items-end pt-4 border-t border-cream">
+              <div className="w-24 h-24 relative rounded-lg overflow-hidden border-2 border-gold flex-shrink-0">
+                <Image src={selectedImage.url} alt="Seçili" fill className="object-cover" sizes="96px" />
+              </div>
+              <div className="flex-1 space-y-1">
+                <label className="text-sm font-medium text-wood-dark">Başlık</label>
+                <input
+                  type="text"
+                  value={pickTitle}
+                  onChange={(e) => setPickTitle(e.target.value)}
+                  placeholder="Galeride gözükecek başlık"
+                  className="w-full px-4 py-2 border border-cream rounded-lg focus:ring-1 focus:ring-gold outline-none"
+                />
+                <p className="text-xs text-wood-medium/60">Kaynak: {selectedImage.source}</p>
+              </div>
+              <div className="w-full md:w-48 space-y-1">
+                <label className="text-sm font-medium text-wood-dark">Kategori</label>
+                <select
+                  value={pickCategory}
+                  onChange={(e) => setPickCategory(e.target.value)}
+                  className="w-full px-4 py-2 border border-cream rounded-lg focus:ring-1 focus:ring-gold outline-none"
+                >
+                  <option>Mutfak Dolabı</option>
+                  <option>Yatak Odası</option>
+                  <option>Giyinme Odası</option>
+                  <option>Banyo Dolabı</option>
+                  <option>Gardırop</option>
+                  <option>TV Ünitesi</option>
+                </select>
+              </div>
+              <button
+                onClick={handleAddFromSite}
+                disabled={addingFromSite}
+                className="w-full md:w-auto px-6 py-2.5 bg-gold hover:bg-gold-dark text-wood-dark font-bold rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {addingFromSite ? <Loader2 size={18} className="animate-spin" /> : <Plus size={18} />}
+                Galeriye Ekle
+              </button>
+            </div>
+          )}
         </CardContent>
       </Card>
 

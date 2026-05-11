@@ -7,7 +7,7 @@ import { ArrowRight, Star } from 'lucide-react'
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 sm:pt-28 pb-12">
       {/* Background image */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -24,7 +24,7 @@ export function Hero() {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={false}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
           className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 border border-gold/40 rounded-full text-gold text-sm font-medium mb-8"
@@ -35,7 +35,7 @@ export function Hero() {
         </motion.div>
 
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-cream font-bold leading-tight mb-6 text-balance"
@@ -46,7 +46,7 @@ export function Hero() {
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
           className="text-cream/80 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
@@ -55,7 +55,7 @@ export function Hero() {
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
@@ -68,7 +68,7 @@ export function Hero() {
             <ArrowRight size={18} />
           </Link>
           <Link
-            href="/galeri"
+            href="/projeler"
             className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-cream/50 text-cream hover:bg-cream/10 font-semibold text-base rounded transition-colors"
           >
             Projelerimizi İncele
@@ -77,7 +77,7 @@ export function Hero() {
 
         {/* Stats */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.55 }}
           className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 max-w-3xl mx-auto bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-6 shadow-xl"

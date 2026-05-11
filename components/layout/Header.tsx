@@ -5,14 +5,16 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Phone } from 'lucide-react'
-import { NAV_LINKS, CONTACT_INFO } from '@/lib/constants'
+import { NAV_LINKS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import { useSiteSettings } from '@/context/SiteSettingsContext'
 import { MobileNav } from './MobileNav'
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const pathname = usePathname()
+  const { contact } = useSiteSettings()
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20)
@@ -76,14 +78,14 @@ export function Header() {
             {/* CTA + Mobile toggle */}
             <div className="flex items-center gap-3">
               <a
-                href={`tel:${CONTACT_INFO.phone.replace(/\s/g, '')}`}
+                href={`tel:${contact.phone.replace(/\s/g, '')}`}
                 className={cn(
                   'hidden md:flex items-center gap-1.5 text-sm font-medium transition-colors',
                   isScrolled || !isHome ? 'text-wood-medium hover:text-gold' : 'text-cream/90 hover:text-gold'
                 )}
               >
                 <Phone size={14} />
-                {CONTACT_INFO.phone}
+                {contact.phone}
               </a>
               <Link
                 href="/teklif-al"
