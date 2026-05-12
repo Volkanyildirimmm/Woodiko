@@ -10,7 +10,6 @@ import { SERVICES, WHATSAPP_NUMBER } from '@/lib/constants'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { trackLead, trackContact } from '@/lib/meta-events'
-import { trackGoogleAdsConversion } from '@/lib/google-ads'
 
 const schema = z.object({
   service: z.string().min(1, 'Lütfen bir hizmet seçin'),
@@ -84,7 +83,6 @@ export function QuoteForm() {
         phone: data.phone,
       }
       trackLead(leadPayload)
-      trackGoogleAdsConversion()
 
       setSubmitted(true)
     } catch (error) {

@@ -1,5 +1,6 @@
 import { hasConsentFor } from './consent'
 import { gaTrackLead, gaTrackContact, gaTrackViewService } from './ga-events'
+import { googleAdsTrackLead, googleAdsTrackContact } from './google-ads'
 
 declare global {
   interface Window {
@@ -57,11 +58,13 @@ export function trackLead(params: {
     budget: params.budget,
     value: params.value,
   })
+  googleAdsTrackLead(params.value || 1000)
 }
 
 export function trackContact(params?: { method?: string; surface?: string }) {
   trackEvent('Contact', params)
   gaTrackContact(params?.method)
+  googleAdsTrackContact(500)
 }
 
 export function trackViewContent(params: {
