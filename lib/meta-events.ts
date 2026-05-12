@@ -1,4 +1,5 @@
 import { hasConsentFor } from './consent'
+import { gaTrackLead, gaTrackContact, gaTrackViewService } from './ga-events'
 
 declare global {
   interface Window {
@@ -50,10 +51,17 @@ export function trackLead(params: {
   currency?: string
 }) {
   trackEvent('Lead', { currency: 'TRY', ...params })
+  gaTrackLead({
+    service: params.service,
+    district: params.district,
+    budget: params.budget,
+    value: params.value,
+  })
 }
 
 export function trackContact(params?: { method?: string; surface?: string }) {
   trackEvent('Contact', params)
+  gaTrackContact(params?.method)
 }
 
 export function trackViewContent(params: {
@@ -64,4 +72,7 @@ export function trackViewContent(params: {
     content_name: params.contentName,
     content_category: params.contentCategory,
   })
+  if (params.contentName) {
+    gaTrackViewService(params.contentName)
+  }
 }

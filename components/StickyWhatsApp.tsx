@@ -8,7 +8,6 @@ import { useSiteSettings } from '@/context/SiteSettingsContext'
 import { WHATSAPP_NUMBER } from '@/lib/constants'
 import { CONSENT_EVENT, readConsent } from '@/lib/consent'
 import { trackContact } from '@/lib/meta-events'
-import { gaTrackContact } from '@/lib/ga-events'
 
 const TOOLTIP_SEEN_KEY = 'woodiko-wa-tooltip-seen'
 const WA_MESSAGE = 'Merhaba, mobilya teklifi almak istiyorum.'
@@ -53,7 +52,6 @@ export default function StickyWhatsApp() {
 
   const handleClick = () => {
     trackContact({ method: 'whatsapp', surface: 'sticky' })
-    gaTrackContact('whatsapp_sticky')
   }
 
   const dismissTooltip = () => {

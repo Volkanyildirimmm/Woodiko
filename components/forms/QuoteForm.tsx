@@ -10,7 +10,6 @@ import { SERVICES, WHATSAPP_NUMBER } from '@/lib/constants'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { trackLead, trackContact } from '@/lib/meta-events'
-import { gaTrackLead, gaTrackContact } from '@/lib/ga-events'
 import { trackGoogleAdsConversion } from '@/lib/google-ads'
 
 const schema = z.object({
@@ -85,7 +84,6 @@ export function QuoteForm() {
         phone: data.phone,
       }
       trackLead(leadPayload)
-      gaTrackLead({ service: data.service, district: data.district, budget: data.budget })
       trackGoogleAdsConversion()
 
       setSubmitted(true)
@@ -110,7 +108,6 @@ export function QuoteForm() {
           rel="noopener noreferrer"
           onClick={() => {
             trackContact({ method: 'whatsapp', surface: 'quote_success' })
-            gaTrackContact('whatsapp_quote_success')
           }}
           className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
         >
