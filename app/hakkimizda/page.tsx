@@ -32,7 +32,7 @@ export default function HakkimizdaPage() {
                 1982&apos;den Bu Yana Siteler&apos;in Güvenilir Mobilya Ustası
               </h1>
               <p className="text-cream/70 text-base leading-relaxed mb-8">
-                Gazi ve Kemal Yıldırım kardeşlerin 1982&apos;de kurduğu Yıldırım Mobilya, bugün Woodiko markasıyla Ankara geneline kişiye özel mobilya tasarımı ve üretimi yapmaya devam ediyor. 40+ yıllık ustalık, modern tasarımla buluşuyor.
+                Gazi,Mustafa ve Kemal Yıldırım kardeşlerin 1982&apos;de kurduğu Yıldırım Mobilya, bugün Woodiko markasıyla Ankara geneline kişiye özel mobilya tasarımı ve üretimi yapmaya devam ediyor. 40+ yıllık ustalık, modern tasarımla buluşuyor.
               </p>
               <Link
                 href="/teklif-al"

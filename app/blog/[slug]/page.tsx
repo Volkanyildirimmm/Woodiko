@@ -1,15 +1,81 @@
+import React from 'react'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import Script from 'next/script'
-import { Clock, Calendar, ArrowLeft } from 'lucide-react'
+import { Clock, Calendar, ArrowLeft, ArrowRight, HelpCircle, Sparkles, ChevronDown } from 'lucide-react'
 import { generateSEO, articleSchema, breadcrumbSchema } from '@/lib/seo'
 import { formatDate } from '@/lib/utils'
 import { AnimatedSection } from '@/components/shared/AnimatedSection'
 import { BLOG_POSTS } from '@/lib/blog-posts'
 
 const posts = BLOG_POSTS
+
+function renderInline(text: string): React.ReactNode {
+  const tokens: React.ReactNode[] = []
+  const regex = /\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*/g
+  let lastIndex = 0
+  let match: RegExpExecArray | null
+  let key = 0
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) tokens.push(text.slice(lastIndex, match.index))
+    if (match[1] && match[2]) {
+      const href = match[2]
+      const isInternal = href.startsWith('/')
+      tokens.push(
+        isInternal ? (
+          <Link key={key++} href={href} className="text-gold hover:text-gold-dark underline underline-offset-2">{match[1]}</Link>
+        ) : (
+          <a key={key++} href={href} target="_blank" rel="noopener noreferrer" className="text-gold hover:text-gold-dark underline underline-offset-2">{match[1]}</a>
+        )
+      )
+    } else if (match[3]) {
+      tokens.push(<strong key={key++} className="font-semibold text-wood-dark">{match[3]}</strong>)
+    }
+    lastIndex = regex.lastIndex
+  }
+  if (lastIndex < text.length) tokens.push(text.slice(lastIndex))
+  return tokens.length === 1 ? tokens[0] : <>{tokens}</>
+}
+
+function parseContent(raw: string): { main: string; faqs: { q: string; a: string }[]; conclusion: string } {
+  const trimmed = raw.trim()
+  const faqMarker = '## Sıkça Sorulan Sorular'
+  const faqIdx = trimmed.indexOf(faqMarker)
+  if (faqIdx === -1) return { main: trimmed, faqs: [], conclusion: '' }
+
+  const main = trimmed.slice(0, faqIdx).trim()
+  const afterMarker = trimmed.slice(faqIdx + faqMarker.length)
+
+  const sepRegex = /\n\s*---\s*\n/
+  const sepMatch = afterMarker.match(sepRegex)
+  const faqBody = sepMatch ? afterMarker.slice(0, sepMatch.index!).trim() : afterMarker.trim()
+  const conclusion = sepMatch ? afterMarker.slice(sepMatch.index! + sepMatch[0].length).trim() : ''
+
+  const faqs: { q: string; a: string }[] = []
+  let currentQ: string | null = null
+  let currentA: string[] = []
+  for (const rawLine of faqBody.split('\n')) {
+    const line = rawLine.trim()
+    if (!line) continue
+    const qMatch = line.match(/^\*\*(.+?)\*\*\s*$/)
+    if (qMatch) {
+      if (currentQ) faqs.push({ q: currentQ, a: currentA.join(' ').trim() })
+      currentQ = qMatch[1]
+      currentA = []
+    } else if (currentQ) {
+      currentA.push(line)
+    }
+  }
+  if (currentQ) faqs.push({ q: currentQ, a: currentA.join(' ').trim() })
+
+  return { main, faqs, conclusion }
+}
+
+function stripInlineMarkdown(text: string): string {
+  return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1').replace(/\*\*(.*?)\*\*/g, '$1')
+}
 
 export function generateStaticParams() {
   return Object.keys(posts).map((slug) => ({ slug }))
@@ -47,7 +113,21 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     { name: post.title, path: `/blog/${params.slug}` },
   ])
 
-  const contentLines = post.content.trim().split('\n')
+  const { main, faqs, conclusion } = parseContent(post.content)
+  const contentLines = main.split('\n')
+
+  const faqSchema = faqs.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: stripInlineMarkdown(f.q),
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: stripInlineMarkdown(f.a),
+      },
+    })),
+  } : null
 
   return (
     <div className="pt-20">
@@ -61,6 +141,13 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
       />
+      {faqSchema && (
+        <Script
+          id="faq-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
 
       {/* Hero image */}
       <div className="relative h-72 md:h-96 overflow-hidden">
@@ -100,14 +187,104 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                   {contentLines.map((line, i) => {
                     if (line.startsWith('## ')) return <h2 key={i} className="font-serif text-xl font-bold text-wood-dark mt-8 mb-3">{line.replace('## ', '')}</h2>
                     if (line.startsWith('### ')) return <h3 key={i} className="font-serif text-lg font-semibold text-wood-dark mt-6 mb-2">{line.replace('### ', '')}</h3>
-                    if (line.startsWith('- ')) return <li key={i} className="ml-4 text-wood-medium/80">{line.replace('- ', '').replace(/\*\*(.*?)\*\*/g, '$1')}</li>
-                    if (line.startsWith('1. ') || line.startsWith('2. ') || /^\d+\. /.test(line)) return <li key={i} className="ml-4 text-wood-medium/80">{line.replace(/^\d+\. /, '')}</li>
+                    if (line.trim() === '---') return <hr key={i} className="my-6 border-cream" />
+                    if (line.startsWith('> ')) return <blockquote key={i} className="border-l-4 border-gold pl-4 italic text-wood-medium/80 my-4">{renderInline(line.replace('> ', ''))}</blockquote>
+                    if (line.startsWith('- ')) return <li key={i} className="ml-4 text-wood-medium/80">{renderInline(line.replace('- ', ''))}</li>
+                    if (line.startsWith('1. ') || line.startsWith('2. ') || /^\d+\. /.test(line)) return <li key={i} className="ml-4 text-wood-medium/80">{renderInline(line.replace(/^\d+\. /, ''))}</li>
                     if (line.trim() === '') return null
                     if (line.startsWith('|')) return null
-                    return <p key={i} className="text-wood-medium/80 leading-relaxed">{line.replace(/\*\*(.*?)\*\*/g, '$1')}</p>
+                    return <p key={i} className="text-wood-medium/80 leading-relaxed">{renderInline(line)}</p>
                   })}
                 </div>
               </AnimatedSection>
+
+              {faqs.length > 0 && (
+                <AnimatedSection className="mt-12">
+                  <section aria-labelledby="faq-heading" itemScope itemType="https://schema.org/FAQPage">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center shrink-0">
+                        <HelpCircle size={20} className="text-gold" />
+                      </div>
+                      <h2 id="faq-heading" className="font-serif text-2xl font-bold text-wood-dark">
+                        Sıkça Sorulan Sorular
+                      </h2>
+                    </div>
+                    <div className="space-y-3">
+                      {faqs.map((faq, i) => (
+                        <details
+                          key={i}
+                          className="group bg-white border border-cream rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-gold/40 transition-all"
+                          itemScope
+                          itemProp="mainEntity"
+                          itemType="https://schema.org/Question"
+                        >
+                          <summary className="flex items-center justify-between gap-4 p-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                            <h3
+                              itemProp="name"
+                              className="font-semibold text-wood-dark text-base leading-snug group-hover:text-gold transition-colors"
+                            >
+                              {renderInline(faq.q)}
+                            </h3>
+                            <ChevronDown
+                              size={20}
+                              className="text-gold shrink-0 transition-transform duration-300 group-open:rotate-180"
+                            />
+                          </summary>
+                          <div
+                            itemScope
+                            itemProp="acceptedAnswer"
+                            itemType="https://schema.org/Answer"
+                            className="px-5 pb-5 pt-0"
+                          >
+                            <div className="pt-3 border-t border-cream">
+                              <p itemProp="text" className="text-wood-medium/85 leading-relaxed text-sm">
+                                {renderInline(faq.a)}
+                              </p>
+                            </div>
+                          </div>
+                        </details>
+                      ))}
+                    </div>
+                  </section>
+                </AnimatedSection>
+              )}
+
+              {conclusion && (
+                <AnimatedSection className="mt-12">
+                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-wood-dark via-wood-dark to-charcoal text-cream p-7 md:p-9 shadow-lg">
+                    <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
+                    <div className="absolute -bottom-16 -left-16 w-56 h-56 rounded-full bg-gold/5 blur-3xl pointer-events-none" />
+                    <div className="relative">
+                      <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold/15 border border-gold/30 rounded-full text-gold text-xs font-semibold mb-4">
+                        <Sparkles size={12} />
+                        Sonuç
+                      </div>
+                      <div className="space-y-3 text-cream/90 leading-relaxed">
+                        {conclusion.split(/\n+/).filter(Boolean).map((para, i) => (
+                          <p key={i} className="text-[15px]">
+                            {renderInline(para)}
+                          </p>
+                        ))}
+                      </div>
+                      <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                        <Link
+                          href="/teklif-al"
+                          className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-gold hover:bg-gold-dark text-wood-dark font-bold text-sm rounded-lg transition-colors"
+                        >
+                          Ücretsiz Keşif Randevusu
+                          <ArrowRight size={16} />
+                        </Link>
+                        <a
+                          href="tel:+905340215278"
+                          className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-transparent border border-cream/30 hover:border-gold hover:text-gold text-cream text-sm font-medium rounded-lg transition-colors"
+                        >
+                          Hemen Ara: 0534 021 52 78
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </AnimatedSection>
+              )}
             </article>
 
             {/* Sidebar */}

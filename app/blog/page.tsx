@@ -118,7 +118,7 @@ export default function BlogPage() {
           ) : (
             <>
               {/* Featured post */}
-          <AnimatedSection className="mb-10">
+          <AnimatedSection key={`featured-${activeCategory}`} className="mb-10">
             <Link href={`/blog/${featured.slug}`} className="group grid md:grid-cols-2 gap-0 bg-cream rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-cream">
               <div className="relative h-64 md:h-auto overflow-hidden">
                 <Image
@@ -151,7 +151,7 @@ export default function BlogPage() {
           </AnimatedSection>
 
           {/* Post grid */}
-          <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <StaggerContainer key={`grid-${activeCategory}`} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {rest.map((post) => (
               <StaggerItem key={post.slug}>
                 <Link href={`/blog/${post.slug}`} className="group block bg-cream rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-cream h-full">

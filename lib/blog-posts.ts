@@ -755,7 +755,7 @@ Banyo dolabı 5 yılda mı, 15 yılda mı yıpranacağı kararı malzemeyi seçt
     title: 'Mutfak Dolabı Kapak Yenileme mi, Komple Yeni mi? Ankara\'da Bütçe Bazlı Karar',
     excerpt:
       'Eski mutfağınızı yenilemek için iki yol var: kapak yenileme (refacing) veya komple yeni. Hangisi sizin için mantıklı? 2026 Ankara fiyatlarıyla karar rehberi.',
-    image: 'https://images.unsplash.com/photo-1556909195-f6e7ad7d3136?w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?w=1200&q=80',
     category: 'Karşılaştırma',
     date: '2026-05-15',
     modified: '2026-05-15',
