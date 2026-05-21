@@ -462,4 +462,482 @@ Kapora %30, montaj sonrası kalan ödeme. Tamamı peşin isteyen üreticiyi terc
 Siteler'de doğru üreticiyi bulmak biraz emek gerektiriyor — ama bulduğunuzda, hazır mobilyada bulamayacağınız bir özel deneyim alıyorsunuz.
     `,
   },
+
+  'ankara-gardirop-fiyatlari-2026': {
+    title: 'Ankara\'da Gardırop Fiyatları 2026: Menteşeli, Sürgülü ve Giyinme Odası Karşılaştırması',
+    excerpt:
+      'Ankara\'da gardırop yaptırmak ne kadar? Menteşeli, sürgülü ve giyinme odası için 2026 güncel m² fiyatları, malzeme farkları ve bütçe taktikleri.',
+    image: 'https://images.unsplash.com/photo-1558997519-83ea9252edf8?w=1200&q=80',
+    category: 'Fiyat Rehberi',
+    date: '2026-05-21',
+    modified: '2026-05-21',
+    readTime: '9 dk okuma',
+    author: 'Volkan Yıldırım',
+    authorImage: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&q=80&fit=crop',
+    related: ['cayyolu-yasamkent-umitkoy-ozel-mobilya-rehberi', 'ankara-mutfak-dolabi-fiyatlari-2024', 'siteler-mobilyasi-kalite-rehberi'],
+    keywords: [
+      'ankara gardırop fiyatları',
+      'sürgülü gardırop fiyat',
+      'giyinme odası fiyatları ankara',
+      'menteşeli gardırop ankara',
+      'özel gardırop ankara',
+      'yaşamkent giyinme odası',
+    ],
+    content: `
+## Ankara'da Gardırop Fiyatlarını Etkileyen 5 Faktör
+
+Gardırop fiyatlandırması mutfak dolabından daha öngörülebilir görünür ama detaylar gizli kalır. Aynı 4 metrelik bir gardırop bir evde 45.000₺'ye, diğerinde 130.000₺'ye mal olabiliyor. Aradaki farkı yaratan beş ana faktör var.
+
+### 1. Kapak Türü
+
+- **Menteşeli kapak:** En ekonomik seçim. m² fiyat aralığı 4.000–7.500₺. Bakımı kolay, ömrü uzun.
+- **Sürgülü kapak (slider):** Önünde açılma alanı gerektirmez; dar yatak odası ve koridorlar için ideal. m² 6.500–11.000₺.
+- **Akordeon kapak:** Modern proje sayısı düşük, bu yüzden m² fiyatı yüksek; özel ev tipleri için.
+- **Push-to-open / kulpsuz kapak:** Görsel olarak en temiz seçim. Standart menteşeliye göre %12–18 ek maliyet.
+
+### 2. İç Donanım Yoğunluğu
+
+Yatak odası gardıroplarında üç ana donanım seviyesi vardır:
+
+- **Sade:** Askılık + raf → temel paket.
+- **Orta:** Askılık, ek çekmece, gömlek rafı, kravatlık → +%25–40.
+- **Premium / giyinme odası:** Ütü modülü, hareketli aydınlatma, takı çekmecesi, ayakkabılık, ayna paneli → +%60–100.
+
+### 3. Malzeme Sınıfı (m² Bazında)
+
+- E1 sınıfı MDF + boya: 4.000–7.500₺
+- E1 MDF + lake: 7.000–11.000₺
+- Akrilik kapak: 8.500–13.000₺
+- Doğal ahşap kaplama: 10.000–16.000₺
+
+Malzeme seçimi konusunu daha derin okumak için [akrilik, lake ve MDF karşılaştırma rehberimize](/blog/akrilik-lake-mdf-mutfak-karsilastirma) bakabilirsiniz; aynı mantık mutfak ile gardırop için ortaktır.
+
+### 4. Aksesuar Markası
+
+Aksesuar kalitesi 10 yıllık arıza farkını yaratır:
+
+- Standart yerli menteşe: 35–60₺ / adet
+- Blum / Hettich / Häfele: 180–350₺ / adet
+
+Aksesuar bütçesi gardırop maliyetinin %8–12'sidir; düşürmek 5 yıl sonra "menteşe düştü" çağrılarına neden olur.
+
+### 5. Aydınlatma ve Elektrik
+
+Otomatik LED bant, hareket sensörü, dahili priz — toplam 5.000–15.000₺ aralığında ek bir kalem. Sonradan eklemek mümkün ama montaj sırasında bırakılan kablo, ileride iş kolaylığı yaratır.
+
+## 2026 Ankara Gardırop Fiyat Tablosu
+
+| Tip | 2 m gardırop | 3 m gardırop | 4 m gardırop | 8 m² giyinme odası |
+|------|---------|---------|---------|---------|
+| Ekonomik (MDF + standart aksesuar) | 18.000₺ | 28.000₺ | 36.000₺ | 65.000₺ |
+| Orta (lake + Blum) | 32.000₺ | 50.000₺ | 68.000₺ | 120.000₺ |
+| Premium (akrilik / ahşap + tam donanım) | 55.000₺ | 88.000₺ | 130.000₺ | 240.000₺ |
+
+> Bu rakamlar Mayıs 2026 itibarıyla doğrudan üretici (atölye) fiyatlarıdır. Aracı firmadan alındığında %15–35 pay biner — Siteler'de neden doğrudan üreticiden alınması gerektiğini [Siteler kalite rehberimizde](/blog/siteler-mobilyasi-kalite-rehberi) detaylı anlatıyoruz.
+
+## Menteşeli mi, Sürgülü mü? 6 Kriterli Karar
+
+| Kriter | Menteşeli | Sürgülü |
+|------|---------|---------|
+| Önünde gereken boşluk | 60–80 cm | 0 cm |
+| İki kapağı aynı anda açma | Mümkün | Mümkün değil |
+| Görsel | Klasik, kapak hatları belirgin | Modern, hatsız panel |
+| Bakım | Düşük | Ray temizliği gerekir |
+| Fiyat | Daha uygun | %15–25 zam |
+| Tavana kadar montaj | Esnek | Profil sınırlı |
+
+**Kısa cevap:** Dar bir yatak odasında, yatağa yakın gardırop için sürgülü; geniş yatak odası veya giyinme odasında menteşeli.
+
+## Giyinme Odası: 2024'ten Sonra Büyüyen Trend
+
+Son iki yılda Yaşamkent, Çayyolu, İncek ve Bağlıca'daki yeni dairelerde giyinme odası tercihi belirgin biçimde arttı. Üç sebebi var:
+
+1. **Yatak odasında nefes alan görünüm** — büyük dolaplar yerine sade gardırop, ayrı modüler giyinme alanı.
+2. **Planlama kolaylığı** — açıkta duran kıyafetler sabah hızını artırır.
+3. **Satış değeri** — emlak ilanlarında "giyinme odalı" daireler bölgesinde %8–12 daha hızlı el değiştiriyor.
+
+8 metrekarelik bir giyinme odasında bütçe aralığı 90.000–250.000₺'dir. Bölgenize özel detaylar için [Çayyolu/Yaşamkent/Ümitköy özel mobilya rehberimize](/blog/cayyolu-yasamkent-umitkoy-ozel-mobilya-rehberi) bakın.
+
+## Fiyatı Düşürmenin 7 Yolu (Kaliteyi Bozmadan)
+
+1. **Görünür yüzeylerde premium, içeride ekonomik malzeme** karması yapın. Kapak lake, gövde MDF + film olabilir.
+2. **Donanımı evrelere yayın.** Çekmece modülünü bir yıl sonra ekleyebilirsiniz; çoğu gardırop modülerdir.
+3. **Standart yükseklikte kalın.** 2,40 m standart; 2,60 m talebi %15–20 zam getirir.
+4. **Aksesuar markasını seçici uygulayın.** Sadece günlük açılan kapaklarda premium menteşe.
+5. **Aydınlatma altyapısını şimdi bırakın, LED'i sonra ekleyin.** Kablo şimdi çekilirse iki yıl sonra LED eklemek 5 dakikalık iş olur.
+6. **Renk paletini sınırlayın.** 3'ten fazla renk üretim süresini ve maliyeti artırır.
+7. **Düşük sezonu kollayın.** Aralık–Şubat arası atölyeler boş; %8–12 pazarlık marjı olur.
+
+## Yıldırım Mobilya'da Gardırop Süreci
+
+1. **Ücretsiz keşif:** Yatak odasında lazer ölçüm.
+2. **3D tasarım:** 48 saat içinde 3 farklı yerleşim önerisi.
+3. **Malzeme seçimi:** Atölyemizde fiziksel numune, kumaşa dokunur gibi gör.
+4. **Üretim:** Gardırop için 4–5 hafta, giyinme odası 5–6 hafta.
+5. **Montaj:** 1–2 günde tamamlanır, taşıma ücreti yoktur.
+
+10 yıl yapısal garanti, Blum/Hettich aksesuar standart.
+
+## Sıkça Sorulan Sorular
+
+**Ankara'da gardırop yaptırmak ne kadar sürer?**
+Ölçüm sonrası ortalama 4–5 hafta. Giyinme odası 5–6 hafta.
+
+**Sürgülü kapaklar açılma zorluğu yapar mı?**
+Premium ray (Blum / Hettich) kullanılırsa 10+ yıl arızasız çalışır. Yerli muadillerde 3–4 yıl sonra ray ayarı gerekebilir.
+
+**Hazır gardırop mı, kişiye özel mi daha mantıklı?**
+Standart yatak odası ölçüleri için hazır olabilir; ancak Ankara'daki yeni dairelerin çoğu (özellikle Yaşamkent, İncek, Bağlıca) köşeli ve eğri duvarlı olduğundan ölçüye özel daha kullanışlıdır.
+
+**Kapora oranı ne kadar?**
+%30 sipariş onayında, kalan tutar montaj sonrası.
+
+**Garanti hangi durumları kapsar?**
+Mekanizma (menteşe, ray), gövde yapısı, montaj — 10 yıl. Kapak yüzeyi (çizilme/lekelenme) 2 yıl.
+
+**Gardırop kapağı bozulursa parça bulunur mu?**
+Standart aksesuar markaları kullanıldığı için 10 yıl içinde parça tedariki sorunsuzdur. Bu da Blum/Hettich tercih edilmesinin bir nedenidir.
+
+---
+
+Bütçenizi belirlerken son hatırlatma: kapak maliyeti **kapak yüzeyi m² hesaplanır, iç hacim değil**. 4 metrelik bir gardırop ortalama 10 m² kapak yüzeyi demektir; bu yüzden 60.000–80.000₺ bütçe orta sınıf için sağlıklı bir başlangıç. Daha somut bir teklif için ücretsiz keşif randevusu alabilirsiniz.
+    `,
+  },
+
+  'banyo-dolabi-neme-dayanikli-malzeme-rehberi': {
+    title: 'Banyo Dolabında Neme Dayanıklı Malzeme Seçimi: Ankara İçin 2026 Rehberi',
+    excerpt:
+      'Banyo dolabı 5 yıl mı, 15 yıl mı dayanır? Cevap malzemededir. WPC, su geçirmez MDF, marin kontrplak ve akrilik kapak — Ankara nemine göre doğru seçim.',
+    image: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=1200&q=80',
+    category: 'Malzeme',
+    date: '2026-05-18',
+    modified: '2026-05-18',
+    readTime: '8 dk okuma',
+    author: 'Volkan Yıldırım',
+    authorImage: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&q=80&fit=crop',
+    related: ['akrilik-lake-mdf-mutfak-karsilastirma', 'mutfak-dolabi-kapak-yenileme-mi-yenisi-mi', 'siteler-mobilyasi-kalite-rehberi'],
+    keywords: [
+      'banyo dolabı malzeme',
+      'neme dayanıklı banyo dolabı',
+      'ankara banyo dolabı',
+      'wpc banyo dolabı',
+      'su geçirmez mdf banyo',
+      'lavabo dolabı malzeme seçimi',
+    ],
+    content: `
+## Banyo: Mobilyanın En Zor Sınavı
+
+Mutfak dolabı sıcak buharla, gardırop kuru hava ile imtihan olur. Banyo dolabı ise hem yüksek nem (yıllık ortalama %75+), hem ısı şokları, hem de doğrudan su sıçramasıyla mücadele eder. Yanlış malzeme seçimi, 18 aylık ömürle 12 yıllık ömür arasındaki farkı doğurur.
+
+Bu rehberde Ankara'da banyo dolabı yaptıracaksanız bilmeniz gereken her şey var: malzeme katmanları, kenar bantlama, aksesuar, montaj detayları ve en yaygın yapılan 7 hata.
+
+## Banyoda Aşınma Nasıl Başlar?
+
+Banyo dolabı bozulması "kapak yüzeyinden" değil; **kenarlardan ve montaj boşluklarından** başlar. Su, kenar bandın gevşek kalan bir milimetresinden içeri sızar; MDF lifleri arasında genleşir; önce kabarcık, sonra kabuk soyulması yaratır.
+
+Yani malzeme seçimi kadar **kenar bantlama tekniği** ve **silikon detayı** belirleyicidir. Bu, banyo dolabını dış görünüşle değil kesitle değerlendirmek anlamına gelir.
+
+## Banyo Dolabı için Malzeme Tablosu
+
+| Malzeme | Neme Dayanım | Ömür (Ankara nem ortalamasında) | Fiyat İndeksi |
+|------|---------|---------|---------|
+| Standart MDF + lake | Orta | 5–7 yıl | 1× |
+| Su geçirmez MDF (yeşil) | Yüksek | 10–12 yıl | 1,25× |
+| WPC (Wood Plastic Composite) | Çok yüksek | 15+ yıl | 1,6× |
+| Akrilik kapak | Yüzey yüksek, gövde orta | 8–10 yıl | 1,4× |
+| Marin kontrplak | Çok yüksek | 12–15 yıl | 1,8× |
+| Polimer (PVC kaplı MDF) | Yüksek | 10 yıl | 1,3× |
+
+### Su Geçirmez MDF (Yeşil MDF) Nedir?
+Üretim aşamasında reçineye su itici katkı eklenir; kesit alındığında yeşilimsi bir renk görünür. Standart MDF'e göre %25–30 daha pahalıdır ama banyoda çift hane yıl kazandırır.
+
+### WPC: Banyonun Şampiyonu
+WPC, ahşap lif + plastiğin birleşimidir. Suyu **emmez**, çürümez, küflenmez. Tek dezavantajı işlenmesinin standart MDF'ten daha zor olması; Siteler'de WPC üretebilen 30–40 atölye var. Yıldırım Mobilya atölyesinde standart üretim malzemelerinden biridir.
+
+### Marin Kontrplak: Klasik Doğal Çözüm
+Tekne yapımında kullanılan marin kontrplak, banyoda da yıllardır ideal kabul edilir. Doğal görünüm sevenler için iyi bir seçim, ama maliyeti yüksek.
+
+### Akrilik Kapağın Gerçeği
+Akrilik kapak çok dayanıklı yüzeylidir ama **altta hangi gövde olduğu** dayanımı belirler. Akrilik tercih ediyorsanız gövde mutlaka su geçirmez MDF veya WPC olmalı.
+
+## Kenar Bantlama: Banyo Dolabının Ömrünün %60'ı
+
+Banyo dolabı için **2 mm PVC kenar bandı + PUR (sıcak reaktif) tutkal** standardınız olmalı. Daha ucuz olan 0,4 mm bantlama 18 ay içinde gevşer.
+
+Bantın iki kritik özelliği:
+
+1. **Sıcaklık dayanımı:** Ankara'da banyo sıcaklığı duş sonrası 35°C üstüne çıkar; bant 80°C'ye kadar dayanmalı.
+2. **Yapışkan tipi:** PUR tutkal su sızdırmaz, standart EVA tutkal sızdırır.
+
+## Aksesuar: Paslı Menteşeyle 5 Yıl Mücadele Etmemek İçin
+
+- **Menteşe:** Paslanmaz çelik veya nikel kaplı. Standart sarı menteşe banyoda 3 yılda paslanmaya başlar.
+- **Çekmece rayları:** Yağlı kapama (soft-close), paslanmaz çelik gövde.
+- **Sap/kulp:** Paslanmaz çelik, krom veya alüminyum tercih edin. Pirinç saplar Ankara suyu ile reaksiyona girip mat görünür.
+
+## Montaj: 5 Kritik Detay
+
+1. Lavabo arkası **mantar tipi silikon** olmalı; akrilik silikon küflenir.
+2. Dolap duvardan **1–2 cm boşluklu** monte edilir, hava dolaşımı için kritik.
+3. Alt çıta varsa duvarla teması silikonla kapatılmamalı — su girerse çıkış yolu kalmalı.
+4. Havalandırma açıklığı kapak iç yüzünde önerilir.
+5. Soft-close menteşe darbeyi azaltıp ömrü uzatır.
+
+## Banyo Tipinize Göre Malzeme Önerisi
+
+**Aile banyosu (günde 4+ duş):** WPC veya su geçirmez MDF + akrilik kapak. Premium aksesuar.
+
+**Misafir banyosu (haftada 5–8 kullanım):** Su geçirmez MDF + lake. Standart aksesuar yeterli.
+
+**Ebeveyn banyosu / buharlı duş:** WPC zorunlu. Marin kontrplak da iyi seçim.
+
+**Lavabo dolabı (banyo dışında, bağımsız):** Standart MDF + lake yeterli; tezgah taş ya da kompakt laminat olmalı.
+
+## En Sık Yapılan 7 Hata
+
+1. **Lavabo deliği özensiz kesim** — sızdırmazlık burada başlar.
+2. **Yer karosuna sıfır oturtmak** — su birikir, alt çıta çürür.
+3. **Standart parlak boya** kullanmak — mat lake nemli ortamda daha dayanıklıdır.
+4. **Ucuz kenar bandı** (0,4 mm) kullanmak — 18 ay içinde gevşer.
+5. **Aspiratör yetersiz banyoda WPC yerine standart MDF tercih etmek.**
+6. **Ayna dolabı içine IP44 altı elektrik aksesuarı koymak** — Ankara nemi için riskli.
+7. **Sapsız (push) montajda silikon detay atlamak** — sap arkasından su sızar.
+
+## 2026 Ankara Banyo Dolabı Fiyat Aralıkları
+
+| Dolap Tipi | Ekonomik | Orta | Premium |
+|------|------|------|------|
+| 80 cm lavabo dolabı | 9.000₺ | 16.000₺ | 28.000₺ |
+| 120 cm lavabo dolabı | 14.000₺ | 24.000₺ | 42.000₺ |
+| Ayna dolabı (LED'li) | 5.500₺ | 9.500₺ | 16.000₺ |
+| Boy dolabı | 7.000₺ | 13.000₺ | 24.000₺ |
+| Tam set (lavabo + ayna + boy) | 22.000₺ | 42.000₺ | 78.000₺ |
+
+> "Orta" sınıf su geçirmez MDF + standart aksesuara; "Premium" WPC + Blum aksesuara karşılık gelir.
+
+## Yıldırım Mobilya Banyo Dolabı Standardı
+
+Atölyemizde tüm banyo dolapları:
+
+- Su geçirmez yeşil MDF gövde (Premium'da WPC opsiyonel)
+- 2 mm PVC kenar bandı + PUR tutkal
+- Paslanmaz çelik menteşe ve ray standart
+- Lavabo arkası mantar silikon detay
+- 10 yıl yapısal, 5 yıl yüzey garantisi
+
+## Sıkça Sorulan Sorular
+
+**Banyo dolabı ne sıklıkla değiştirilir?**
+Doğru malzemeyle 10–15 yıl. Standart malzemeyle 5–7 yıl.
+
+**Banyo tezgahı malzeme olarak ne tercih edilmeli?**
+Kompakt laminat, granit, seramik veya solid surface. Cam tezgah Ankara suyu sertliğiyle iz tutar.
+
+**Akrilik kapak banyoda riskli mi?**
+Yüzey çok dayanıklıdır; risk gövdededir. Akrilik tercih ediyorsanız gövde su geçirmez MDF veya WPC olmalı.
+
+**Banyo dolabını ben monte edebilir miyim?**
+Lavabo bağlantısı, sızdırmazlık ve ayar profesyonel iş gerektirir. Hatalı silikon = iki yıl sonra çürüme. Profesyonel montaj önerilir.
+
+**Ankara suyunun sertliği dolabı etkiler mi?**
+Doğrudan değil ama buharlaşma sonrası kalan kireç metal aksesuarları matlaştırır. Krom veya paslanmaz çelik tercih edin.
+
+**Banyoda akrilik mi, lake mi daha iyi?**
+Akrilik daha parlak ve sert yüzey; lake mat seçeneklerinde daha sıcak görünüm. Detaylar için [akrilik vs lake karşılaştırma yazımıza](/blog/akrilik-lake-mdf-mutfak-karsilastirma) bakın — aynı mantık banyo için de geçerli.
+
+---
+
+Banyo dolabı 5 yılda mı, 15 yılda mı yıpranacağı kararı malzemeyi seçtiğiniz an verilir. Bütçenizin %15'ini kalite malzemeye ayırın — uzun vadede sizi yeni dolap masrafından kurtarır.
+    `,
+  },
+
+  'mutfak-dolabi-kapak-yenileme-mi-yenisi-mi': {
+    title: 'Mutfak Dolabı Kapak Yenileme mi, Komple Yeni mi? Ankara\'da Bütçe Bazlı Karar',
+    excerpt:
+      'Eski mutfağınızı yenilemek için iki yol var: kapak yenileme (refacing) veya komple yeni. Hangisi sizin için mantıklı? 2026 Ankara fiyatlarıyla karar rehberi.',
+    image: 'https://images.unsplash.com/photo-1556909195-f6e7ad7d3136?w=1200&q=80',
+    category: 'Karşılaştırma',
+    date: '2026-05-15',
+    modified: '2026-05-15',
+    readTime: '10 dk okuma',
+    author: 'Volkan Yıldırım',
+    authorImage: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&q=80&fit=crop',
+    related: ['ankara-mutfak-dolabi-fiyatlari-2024', 'akrilik-lake-mdf-mutfak-karsilastirma', 'siteler-mobilyasi-kalite-rehberi'],
+    keywords: [
+      'mutfak dolabı kapak yenileme',
+      'mutfak yenileme ankara',
+      'eski mutfak nasıl yenilenir',
+      'mutfak refacing ankara',
+      'kapak değişimi fiyat',
+      'mutfak dolabı kapak değişimi',
+    ],
+    content: `
+## Mutfak Yenileme Kararının Anatomisi
+
+Eski mutfağınızı yenilemenin iki yolu var:
+
+1. **Kapak yenileme (refacing):** Gövdeyi koruyup sadece kapak ve aksesuarları değiştirmek.
+2. **Komple değişim:** Sıfırdan yeni mutfak.
+
+İkisi arasındaki seçim sadece bütçe değil; gövdenin durumu, planın değişip değişmeyeceği ve evdeki kullanım yoğunluğu ile şekillenir. Bu yazıda Ankara'daki gerçek fiyatlar, hangi durumda hangisinin mantıklı olduğu, ve 12 maddelik bir kontrol listesi paylaşıyoruz.
+
+## Kapak Yenileme Nedir? (3 Dakikalık Özet)
+
+Refacing, dolap gövdesini yerinde bırakıp:
+
+- Tüm kapakları değiştirmek
+- Menteşe ve rayları yenilemek
+- Çekmeceleri (gerekirse) yenilemek
+- Kulp ve sap değişimi yapmak
+- Fayans arası, açık raf, bant detaylarını güncellemek
+
+Tezgah, evye ve elektrikli ev aletleri istenirse korunur, istenirse değiştirilir.
+
+**Süre:** 3–7 gün (komple değişim 4–6 hafta).
+**Maliyet:** Yeni mutfağın %35–45'i.
+
+## Hangi Durumda Refacing Mantıklı?
+
+| Durum | Refacing Mantıklı mı? |
+|------|------|
+| Gövde sağlam (MDF şişmemiş, kabarmamış) | Evet |
+| Mutfak yerleşim planı seviyorsanız | Evet |
+| Bütçe sınırlı (80.000₺ altı) | Evet |
+| Eski mutfak 15+ yıllık ve gövde MDF | Hayır |
+| Yerleşim planı değişecek | Hayır |
+| Tezgah da yenilenecek + ada eklenecek | Karışık (komple önerilir) |
+| Elektrikli ev aletleri yer değiştirecek | Hayır |
+| Su tesisatı yenilenecek | Hayır |
+
+## 2026 Ankara Fiyat Karşılaştırması (10 m² Mutfak)
+
+| Kalem | Refacing | Komple Yeni |
+|------|------|------|
+| Kapak (MDF + lake) | 28.000₺ | dahil |
+| Menteşe + ray | 6.500₺ | dahil |
+| Çekmece yenileme | 5.000₺ | dahil |
+| Aksesuar (sap, frenli kapama) | 4.000₺ | dahil |
+| İşçilik (3–7 gün) | 8.500₺ | dahil |
+| **Refacing toplam** | **52.000₺** | – |
+| Yeni mutfak (tezgah hariç) | – | 145.000₺ |
+| Tezgah (kompakt laminat) | (opsiyonel) 18.000₺ | 22.000₺ |
+| **Toplam (tezgah dahil)** | **70.000₺** | **167.000₺** |
+
+> Refacing, yeni mutfağın %42'sine mal olur. Ankara için 2026 ortalamasıdır; tam fiyat listesi için [Ankara mutfak dolabı fiyatları rehberimizi](/blog/ankara-mutfak-dolabi-fiyatlari-2024) inceleyin.
+
+## Refacing'in Sessiz Gerçeği: Gövde Kalitesi Belirleyici
+
+Bir kapak ne kadar yüksek kalite olursa olsun, alt gövde **iflas etmişse**, refacing kısa vadeli bir ertelemedir. Bu yüzden keşif sırasında en çok zamanı kapak seçimine değil, gövde testlerine ayırırız.
+
+### Gövdenin "İflas" Belirtileri
+
+- Lavabo altında MDF kabarmış, suya doymuş → gövde değiştirin.
+- Köşeler kırılgan, vida tutmaz hale gelmiş → komple değişim önerilir.
+- Alt çıta çürümüş → çürük yayılır, komple değişim akıllıca.
+- Üst dolaplar tavandan duvarda gözle görünür eğim almışsa → taşıyıcı yapı sorunlu.
+
+**Pratik test:** Vida çıkardığınızda etrafındaki malzeme tozlu hale gelmiş ve vida tekrar tutmuyorsa — gövde tutmuyor, refacing zaman kaybı olur.
+
+## Refacing Akış Şeması
+
+1. Keşif (ücretsiz, 45 dk)
+2. Gövde sağlamlık raporu (yazılı)
+3. Kapak ve aksesuar seçimi
+4. Sipariş + üretim (10–14 gün)
+5. Mutfak boşaltma
+6. Söküm (1 gün)
+7. Gövde temizliği + revizyon (1 gün)
+8. Yeni kapak montajı (2–4 gün)
+9. Test + teslim
+
+## Refacing'in Sınırları
+
+Refacing yapamadığımız durumlar:
+
+- Köşe dolabı mekanizması yenilenmek isteniyor (gövde değişikliği gerekir).
+- Davlumbaz / aspiratör yer değiştirecek (elektrik + havalandırma).
+- Davlumbaz tipi değişiyor.
+- Tezgah üstü baharatlık / kavanozluk eklenecek.
+
+Bunlardan biri varsa komple yenileme daha mantıklıdır.
+
+## Karşılaştırma Tablosu: Refacing vs Komple Yeni
+
+| Kriter | Refacing | Komple Yeni |
+|------|------|------|
+| Süre | 3–7 gün | 4–6 hafta |
+| Maliyet | Yeninin %35–45'i | Tam |
+| Yerleşim değişikliği | Mümkün değil | Tamamen esnek |
+| Garanti | 5 yıl (kapak), gövde hariç | 10 yıl tam |
+| Ev kullanılamaz mı? | 3–4 gün | 1–2 hafta |
+| Resale değer artışı | Orta | Yüksek |
+| Karbon ayak izi | Düşük | Yüksek |
+
+## "Yarı Yenileme" Diye Bir Şey Var mı?
+
+Evet. Bazı müşterilerimiz:
+
+- Üst dolapları açık raf yapıp
+- Alt dolaplarda sadece kapak değiştirip
+- Tezgah ve evye'yi yeniliyor.
+
+Bu yaklaşıma "kısmi refacing" veya "%60 yenileme" deniyor. Bütçe 80.000–110.000₺ aralığında oturur ve mutfağın görsel etkisi %85'i yeni gibi hissedilir. Yaşamkent'teki birçok modern dairemizde bu yaklaşımı uyguladık.
+
+## Renk ve Stil Geçişleri
+
+Refacing'in en keyifli yanı: tamamen yeni bir stil yaratabilirsiniz.
+
+- **Klasik → Modern:** Detaylı klasik kapakları düz mat lake ile değiştirin.
+- **Açık → Koyu:** Antrasit veya zeytin yeşili lake popüler; ışığı az olan mutfaklarda dikkatli olun.
+- **Mat → Akrilik:** Yüzeyde belirgin değişim, %18–25 ek maliyet. Malzeme karşılaştırması için [akrilik vs lake yazımıza](/blog/akrilik-lake-mdf-mutfak-karsilastirma) bakın.
+- **Kulplu → Kulpsuz (push):** Vida deliklerinin kapatılması gerekir, ek 4.000–6.000₺.
+
+## Hangi Mutfak Refacing İçin İdeal?
+
+Refacing'in en verimli olduğu profil:
+
+- Mutfak 5–12 yaşında.
+- Gövde MDF (suntalama değil) ve sağlam.
+- Yerleşim memnuniyet veriyor.
+- Sadece görsel veya işlevsel yenileme isteniyor.
+
+15+ yaşındaki mutfaklarda gövde genellikle yorgundur; refacing 2–3 yıl sonra başka sorunlar açığa çıkarabilir.
+
+## Kira Evi ve Yatırım Daireleri
+
+Refacing özellikle uzun süreli kiracılarda veya yatırım dairelerinde anlamlıdır:
+
+- Düşük maliyet, hızlı süre.
+- Kira artışı için somut bir gerekçe.
+- Ev sahibiyle bütçe paylaşımı yapılabilir.
+- Yatırım dairesinde değer artışı: Ankara'da ortalama %4–8 dolaylı katkı.
+
+## Sıkça Sorulan Sorular
+
+**Refacing'in garantisi nedir?**
+Kapaklarda 5 yıl yüzey, 10 yıl yapısal garanti; gövde garanti dışıdır çünkü mevcut yapıyı koruyoruz.
+
+**Refacing'de kaç gün mutfak kullanamam?**
+Söküm + montaj 3–4 gün. Tezgah da değişiyorsa toplam 1 hafta.
+
+**Her firma aynı refacing sonucunu verir mi?**
+Hayır. Doğru ölçüm ve aksesuar uyumu kritik. Yanlış ölçü = kapak çakışması veya boşluk. Doğru üreticiyi seçmek için [Siteler kalite rehberimizdeki](/blog/siteler-mobilyasi-kalite-rehberi) 7 kriteri uygulayın.
+
+**Eski tezgahla yeni kapak uyumlu görünür mü?**
+Tezgah ve kapak rengini tasarımcı koordine etmezse hayal kırıklığı olur. Önerimiz: tezgah da yenilenmiyorsa kapak rengini tezgaha referans alarak seçin.
+
+**Refacing kira evinde mantıklı mı?**
+Evet, özellikle uzun süreli kiracılarda. Maliyet düşük, kira artışı sağlar.
+
+**Mevcut mutfak Siteler'de yapılmış değilse refacing yine yapılabilir mi?**
+Evet. Marka veya atölye fark etmez; gövde standartlarına bakılır.
+
+**Refacing kararı için ne kadar süre düşünmeliyim?**
+Bir keşif yaptırın, gövde raporunu yazılı isteyin, 2 hafta düşünün. Acele karar refacing-or-replace dönüm noktasında pahalıya patlar.
+
+---
+
+Bu yazı bittiğinde elinizde net bir karar olmalı: gövdeniz sağlamsa ve plandan memnunsanız refacing; aksi halde komple yenileme. Kararsızsanız ücretsiz keşif sırasında size yazılı bir gövde raporu veriyoruz — "Refacing burada mantıklı" veya "Bu mutfak komple yenilense daha akıllıca" cümlesini renkten önce duymak en sağlıklısı.
+    `,
+  },
 }
