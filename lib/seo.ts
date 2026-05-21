@@ -20,7 +20,11 @@ export function generateSEO({
 }: SEOProps = {}): Metadata {
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Ankara'nın Özel Mobilya Ustası`
   const url = `${SITE_URL}${path}`
-  const imageUrl = image.startsWith('http') ? image : `${SITE_URL}${image}`
+  const imageUrl = image
+    ? image.startsWith('http')
+      ? image
+      : `${SITE_URL}${image}`
+    : undefined
 
   return {
     title: fullTitle,
@@ -36,7 +40,9 @@ export function generateSEO({
       description,
       url,
       siteName: SITE_NAME,
-      images: [{ url: imageUrl, width: 1200, height: 630, alt: fullTitle }],
+      ...(imageUrl
+        ? { images: [{ url: imageUrl, width: 1200, height: 630, alt: fullTitle }] }
+        : {}),
       locale: 'tr_TR',
       type: 'website',
     },
@@ -44,7 +50,7 @@ export function generateSEO({
       card: 'summary_large_image',
       title: fullTitle,
       description,
-      images: [imageUrl],
+      ...(imageUrl ? { images: [imageUrl] } : {}),
     },
     robots: noIndex
       ? { index: false, follow: false }
@@ -71,7 +77,8 @@ const aggregateRating = {
   worstRating: 1,
 }
 
-export const localBusinessSchema = {
+export function buildLocalBusinessSchema(socials: string[] = []) {
+  return {
   '@context': 'https://schema.org',
   '@type': ['LocalBusiness', 'FurnitureStore', 'HomeAndConstructionBusiness'],
   '@id': `${SITE_URL}/#business`,
@@ -83,6 +90,7 @@ export const localBusinessSchema = {
   telephone: '+90-507-734-75-21',
   email: 'info@woodiko.com',
   foundingDate: '1982',
+  foundingLocation: { '@type': 'Place', name: 'Siteler, Altındağ, Ankara' },
   slogan: 'Ankara\'nın Özel Mobilya Ustası',
   address: {
     '@type': 'PostalAddress',
@@ -114,7 +122,7 @@ export const localBusinessSchema = {
     { '@type': 'Place', name: 'Bağlıca' },
     { '@type': 'Place', name: 'İncek' },
   ],
-  founders: [
+  founder: [
     { '@type': 'Person', name: 'Gazi Yıldırım' },
     { '@type': 'Person', name: 'Kemal Yıldırım' },
   ],
@@ -128,7 +136,7 @@ export const localBusinessSchema = {
   ],
   priceRange: '$$$',
   image: `${SITE_URL}/og/default`,
-  logo: `${SITE_URL}/logo.png`,
+  logo: `${SITE_URL}/logo.svg`,
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
     name: 'Özel Mobilya Hizmetleri',
@@ -151,25 +159,29 @@ export const localBusinessSchema = {
     author: { '@type': 'Person', name: t.name },
     reviewBody: t.text,
   })),
-  sameAs: ['https://instagram.com/woodikomobilya'] as string[],
+  sameAs: socials.filter(Boolean),
+  }
 }
 
-export const organizationSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  '@id': `${SITE_URL}/#organization`,
-  name: SITE_NAME,
-  legalName: 'Yıldırım Mobilya',
-  url: SITE_URL,
-  logo: `${SITE_URL}/logo.png`,
-  foundingDate: '1982',
-  contactPoint: {
-    '@type': 'ContactPoint',
-    telephone: '+90-507-734-75-21',
-    contactType: 'customer service',
-    areaServed: 'TR',
-    availableLanguage: ['Turkish'],
-  },
+export function buildOrganizationSchema(socials: string[] = []) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${SITE_URL}/#organization`,
+    name: SITE_NAME,
+    legalName: 'Yıldırım Mobilya',
+    url: SITE_URL,
+    logo: `${SITE_URL}/logo.svg`,
+    foundingDate: '1982',
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: '+90-507-734-75-21',
+      contactType: 'customer service',
+      areaServed: 'TR',
+      availableLanguage: ['Turkish'],
+    },
+    sameAs: socials.filter(Boolean),
+  }
 }
 
 export const websiteSchema = {
@@ -232,7 +244,7 @@ export function articleSchema(post: {
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,
-      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.svg` },
     },
   }
 }

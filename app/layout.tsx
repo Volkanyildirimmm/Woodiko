@@ -3,7 +3,12 @@ import { Outfit, Montserrat } from 'next/font/google'
 import '@/styles/globals.css'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { localBusinessSchema, organizationSchema, websiteSchema, generateSEO } from '@/lib/seo'
+import {
+  buildLocalBusinessSchema,
+  buildOrganizationSchema,
+  websiteSchema,
+  generateSEO,
+} from '@/lib/seo'
 import Script from 'next/script'
 import { Suspense } from 'react'
 import { PageTracker } from '@/components/shared/PageTracker'
@@ -44,16 +49,26 @@ export async function generateMetadata(): Promise<Metadata> {
   return base
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  let socials: string[] = []
+  try {
+    const settings = await fetchSiteSettings()
+    socials = [
+      settings.social.instagramUrl,
+      settings.social.facebookUrl,
+      settings.social.youtubeUrl,
+    ].filter((s) => typeof s === 'string' && s.trim().length > 0)
+  } catch {}
+
+  const localBusinessSchema = buildLocalBusinessSchema(socials)
+  const organizationSchema = buildOrganizationSchema(socials)
+
   return (
     <html lang="tr" className={`${outfit.variable} ${montserrat.variable}`}>
-      <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-      </head>
       <body className="min-h-screen flex flex-col bg-cream-light">
         <SiteSettingsProvider>
           <SiteScripts />

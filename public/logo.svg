@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" role="img" aria-label="Woodiko — Yıldırım Mobilya">
+  <title>Woodiko</title>
+  <desc>Woodiko, Yıldırım Mobilya markası — Ankara Siteler'de özel mobilya ustası, 1982'den beri.</desc>
+  <rect width="640" height="160" fill="#FAF7F2"/>
+  <g transform="translate(40,32)">
+    <path d="M0 0 L24 96 L48 16 L72 96 L96 0" stroke="#C9A84C" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g font-family="Montserrat, Arial, sans-serif" fill="#2C1810">
+    <text x="170" y="92" font-size="56" font-weight="800" letter-spacing="2">WOODIKO</text>
+    <text x="172" y="122" font-size="18" font-weight="500" fill="#5C3A21" letter-spacing="4">YILDIRIM MOBİLYA · 1982</text>
+  </g>
+</svg>
