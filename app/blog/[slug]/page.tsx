@@ -5,12 +5,114 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Script from 'next/script'
 import { Clock, Calendar, ArrowLeft, ArrowRight, HelpCircle, Sparkles, ChevronDown } from 'lucide-react'
+import { collection, getDocs, limit, query, where } from 'firebase/firestore'
+import { db } from '@/lib/firebase'
 import { generateSEO, articleSchema, breadcrumbSchema } from '@/lib/seo'
 import { formatDate } from '@/lib/utils'
 import { AnimatedSection } from '@/components/shared/AnimatedSection'
 import { BLOG_POSTS } from '@/lib/blog-posts'
 
+export const revalidate = 60
+
 const posts = BLOG_POSTS
+
+type ResolvedPost = {
+  title: string
+  excerpt: string
+  image: string
+  category: string
+  date: string
+  modified?: string
+  author: string
+  authorImage: string
+  readTime: string
+  keywords?: string[]
+  related: string[]
+  source: 'static' | 'firestore'
+  rawContent: string
+  htmlContent: string
+  faqs: { q: string; a: string }[]
+  conclusion: string
+}
+
+const DEFAULT_AUTHOR_IMAGE = 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&q=80&fit=crop'
+
+async function fetchFromFirestore(slug: string) {
+  try {
+    const q = query(collection(db, 'blogs'), where('slug', '==', slug), limit(1))
+    const snap = await getDocs(q)
+    if (snap.empty) return null
+    return snap.docs[0].data() as any
+  } catch (err) {
+    console.error('Firestore blog lookup failed:', err)
+    return null
+  }
+}
+
+function toIsoDate(v: any): string {
+  if (!v) return ''
+  if (typeof v === 'string') return v
+  if (typeof v?.toDate === 'function') return v.toDate().toISOString()
+  if (v instanceof Date) return v.toISOString()
+  return String(v)
+}
+
+async function resolvePost(slug: string): Promise<ResolvedPost | null> {
+  const staticPost = posts[slug]
+  if (staticPost) {
+    const { main, faqs, conclusion } = parseContent(staticPost.content)
+    return {
+      title: staticPost.title,
+      excerpt: staticPost.excerpt,
+      image: staticPost.image,
+      category: staticPost.category,
+      date: staticPost.date,
+      modified: staticPost.modified,
+      author: staticPost.author,
+      authorImage: staticPost.authorImage,
+      readTime: staticPost.readTime,
+      keywords: staticPost.keywords,
+      related: staticPost.related || [],
+      source: 'static',
+      rawContent: main,
+      htmlContent: '',
+      faqs,
+      conclusion,
+    }
+  }
+
+  const data = await fetchFromFirestore(slug)
+  if (!data) return null
+
+  const fbFaqs = Array.isArray(data.faqs)
+    ? data.faqs
+        .map((f: any) => ({ q: String(f.question || '').trim(), a: String(f.answer || '').trim() }))
+        .filter((f: { q: string; a: string }) => f.q && f.a)
+    : []
+
+  const keywords = typeof data.focusKeywords === 'string'
+    ? data.focusKeywords.split(',').map((k: string) => k.trim()).filter(Boolean)
+    : []
+
+  return {
+    title: data.title || '',
+    excerpt: data.excerpt || '',
+    image: data.coverImage || '',
+    category: data.category || 'Genel',
+    date: toIsoDate(data.publishedAt || data.createdAt),
+    modified: toIsoDate(data.updatedAt) || undefined,
+    author: data.author || 'Woodiko Ekibi',
+    authorImage: DEFAULT_AUTHOR_IMAGE,
+    readTime: '5 dk okuma',
+    keywords,
+    related: [],
+    source: 'firestore',
+    rawContent: '',
+    htmlContent: typeof data.content === 'string' ? data.content : '',
+    faqs: fbFaqs,
+    conclusion: typeof data.conclusion === 'string' ? data.conclusion : '',
+  }
+}
 
 function renderInline(text: string): React.ReactNode {
   const tokens: React.ReactNode[] = []
@@ -82,7 +184,7 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const post = posts[params.slug]
+  const post = await resolvePost(params.slug)
   if (!post) return {}
   return generateSEO({
     title: post.title,
@@ -93,8 +195,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   })
 }
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = posts[params.slug]
+export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+  const post = await resolvePost(params.slug)
   if (!post) notFound()
 
   const article = articleSchema({
@@ -113,8 +215,9 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     { name: post.title, path: `/blog/${params.slug}` },
   ])
 
-  const { main, faqs, conclusion } = parseContent(post.content)
-  const contentLines = main.split('\n')
+  const faqs = post.faqs
+  const conclusion = post.conclusion
+  const contentLines = post.source === 'static' ? post.rawContent.split('\n') : []
 
   const faqSchema = faqs.length > 0 ? {
     '@context': 'https://schema.org',
@@ -183,19 +286,26 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                   <span className="flex items-center gap-1"><Clock size={12} />{post.readTime}</span>
                 </div>
 
-                <div className="prose prose-sm max-w-none text-wood-dark/80 leading-relaxed space-y-4">
-                  {contentLines.map((line, i) => {
-                    if (line.startsWith('## ')) return <h2 key={i} className="font-serif text-xl font-bold text-wood-dark mt-8 mb-3">{line.replace('## ', '')}</h2>
-                    if (line.startsWith('### ')) return <h3 key={i} className="font-serif text-lg font-semibold text-wood-dark mt-6 mb-2">{line.replace('### ', '')}</h3>
-                    if (line.trim() === '---') return <hr key={i} className="my-6 border-cream" />
-                    if (line.startsWith('> ')) return <blockquote key={i} className="border-l-4 border-gold pl-4 italic text-wood-medium/80 my-4">{renderInline(line.replace('> ', ''))}</blockquote>
-                    if (line.startsWith('- ')) return <li key={i} className="ml-4 text-wood-medium/80">{renderInline(line.replace('- ', ''))}</li>
-                    if (line.startsWith('1. ') || line.startsWith('2. ') || /^\d+\. /.test(line)) return <li key={i} className="ml-4 text-wood-medium/80">{renderInline(line.replace(/^\d+\. /, ''))}</li>
-                    if (line.trim() === '') return null
-                    if (line.startsWith('|')) return null
-                    return <p key={i} className="text-wood-medium/80 leading-relaxed">{renderInline(line)}</p>
-                  })}
-                </div>
+                {post.source === 'static' ? (
+                  <div className="prose prose-sm max-w-none text-wood-dark/80 leading-relaxed space-y-4">
+                    {contentLines.map((line, i) => {
+                      if (line.startsWith('## ')) return <h2 key={i} className="font-serif text-xl font-bold text-wood-dark mt-8 mb-3">{line.replace('## ', '')}</h2>
+                      if (line.startsWith('### ')) return <h3 key={i} className="font-serif text-lg font-semibold text-wood-dark mt-6 mb-2">{line.replace('### ', '')}</h3>
+                      if (line.trim() === '---') return <hr key={i} className="my-6 border-cream" />
+                      if (line.startsWith('> ')) return <blockquote key={i} className="border-l-4 border-gold pl-4 italic text-wood-medium/80 my-4">{renderInline(line.replace('> ', ''))}</blockquote>
+                      if (line.startsWith('- ')) return <li key={i} className="ml-4 text-wood-medium/80">{renderInline(line.replace('- ', ''))}</li>
+                      if (line.startsWith('1. ') || line.startsWith('2. ') || /^\d+\. /.test(line)) return <li key={i} className="ml-4 text-wood-medium/80">{renderInline(line.replace(/^\d+\. /, ''))}</li>
+                      if (line.trim() === '') return null
+                      if (line.startsWith('|')) return null
+                      return <p key={i} className="text-wood-medium/80 leading-relaxed">{renderInline(line)}</p>
+                    })}
+                  </div>
+                ) : (
+                  <div
+                    className="blog-content max-w-none"
+                    dangerouslySetInnerHTML={{ __html: post.htmlContent }}
+                  />
+                )}
               </AnimatedSection>
 
               {faqs.length > 0 && (
@@ -300,21 +410,23 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                     Teklif Al
                   </Link>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-wood-dark text-sm mb-3">İlgili Yazılar</h3>
-                  <div className="space-y-3">
-                    {post.related.map((slug) => {
-                      const rel = posts[slug]
-                      if (!rel) return null
-                      return (
-                        <Link key={slug} href={`/blog/${slug}`} className="flex gap-3 group">
-                          <Image src={rel.image} alt={rel.title} width={60} height={60} className="rounded-lg object-cover shrink-0 w-14 h-14" />
-                          <span className="text-xs text-wood-medium group-hover:text-gold transition-colors leading-snug font-medium">{rel.title}</span>
-                        </Link>
-                      )
-                    })}
+                {post.related.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold text-wood-dark text-sm mb-3">İlgili Yazılar</h3>
+                    <div className="space-y-3">
+                      {post.related.map((slug) => {
+                        const rel = posts[slug]
+                        if (!rel) return null
+                        return (
+                          <Link key={slug} href={`/blog/${slug}`} className="flex gap-3 group">
+                            <Image src={rel.image} alt={rel.title} width={60} height={60} className="rounded-lg object-cover shrink-0 w-14 h-14" />
+                            <span className="text-xs text-wood-medium group-hover:text-gold transition-colors leading-snug font-medium">{rel.title}</span>
+                          </Link>
+                        )
+                      })}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </AnimatedSection>
           </div>

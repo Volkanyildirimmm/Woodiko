@@ -7,7 +7,7 @@ import { db, storage } from '@/lib/firebase'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Plus, Trash2 } from 'lucide-react'
 import 'react-quill/dist/quill.snow.css'
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false, loading: () => <p>Editör yükleniyor...</p> })
@@ -33,7 +33,16 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
     coverImage: '',
     canonicalUrl: '',
     tags: '',
+    conclusion: '',
   })
+
+  const [faqs, setFaqs] = useState<{ question: string; answer: string }[]>([])
+
+  const addFaq = () => setFaqs(prev => [...prev, { question: '', answer: '' }])
+  const removeFaq = (idx: number) => setFaqs(prev => prev.filter((_, i) => i !== idx))
+  const updateFaq = (idx: number, field: 'question' | 'answer', value: string) => {
+    setFaqs(prev => prev.map((f, i) => (i === idx ? { ...f, [field]: value } : f)))
+  }
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -57,7 +66,14 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
             coverImage: data.coverImage || '',
             canonicalUrl: data.canonicalUrl || '',
             tags: Array.isArray(data.tags) ? data.tags.join(', ') : (data.tags || ''),
+            conclusion: data.conclusion || '',
           })
+          if (Array.isArray(data.faqs)) {
+            setFaqs(data.faqs.map((f: any) => ({
+              question: f.question || '',
+              answer: f.answer || '',
+            })))
+          }
         } else {
           alert('Blog yazısı bulunamadı!')
           router.push('/admin/blog')
@@ -154,10 +170,15 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
 
       const tagsArray = formData.tags.split(',').map(t => t.trim()).filter(t => t !== '')
 
+      const cleanedFaqs = faqs
+        .map(f => ({ question: f.question.trim(), answer: f.answer.trim() }))
+        .filter(f => f.question && f.answer)
+
       const blogData = {
         ...formData,
         tags: tagsArray,
         coverImage: coverImageUrl,
+        faqs: cleanedFaqs,
         updatedAt: new Date().toISOString(),
       }
 
@@ -228,16 +249,83 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
               <div className="h-auto pb-12">
                 <label className="block text-sm font-bold text-wood-dark mb-1">Yazı İçeriği (H2, H3 hiyerarşisine dikkat edin)</label>
                 <div className="bg-white border-cream rounded-lg overflow-hidden">
-                  <ReactQuill 
+                  <ReactQuill
                     ref={quillRef}
-                    theme="snow" 
-                    value={formData.content} 
-                    onChange={(val) => setFormData({...formData, content: val})} 
+                    theme="snow"
+                    value={formData.content}
+                    onChange={(val) => setFormData({...formData, content: val})}
                     modules={modules}
                     className="min-h-[400px]"
                   />
                 </div>
               </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-cream shadow-sm bg-amber-50/30">
+            <CardHeader>
+              <CardTitle className="text-amber-900">Sıkça Sorulan Sorular (FAQ)</CardTitle>
+              <CardDescription>
+                Yazının sonuna gelecek modüler FAQ bölümü. Doldurursanız <strong>FAQPage schema (JSON-LD)</strong> otomatik eklenir — Google rich result + AI cite oranı için kritik.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {faqs.length === 0 && (
+                <p className="text-xs text-amber-700/70 italic">Henüz soru eklenmedi. Aşağıdaki butona tıklayarak başlayın.</p>
+              )}
+              {faqs.map((faq, i) => (
+                <div key={i} className="border border-amber-200 rounded-lg p-3 bg-white relative">
+                  <button
+                    type="button"
+                    onClick={() => removeFaq(i)}
+                    className="absolute top-2 right-2 text-red-500 hover:text-red-700 p-1 rounded"
+                    aria-label="Soruyu sil"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                  <label className="block text-xs font-semibold text-amber-900 mb-1">Soru #{i + 1}</label>
+                  <input
+                    type="text"
+                    value={faq.question}
+                    onChange={(e) => updateFaq(i, 'question', e.target.value)}
+                    placeholder="Örn: Mutfak dolabı ne kadar sürede teslim edilir?"
+                    className="w-full px-3 py-1.5 border border-cream rounded text-sm font-medium mb-2 pr-8 focus:ring-2 focus:ring-amber-300 outline-none"
+                  />
+                  <label className="block text-xs font-semibold text-amber-900 mb-1">Cevap</label>
+                  <textarea
+                    value={faq.answer}
+                    onChange={(e) => updateFaq(i, 'answer', e.target.value)}
+                    placeholder="Net, kısa ve bilgi verici bir cevap yazın."
+                    className="w-full px-3 py-1.5 border border-cream rounded text-sm min-h-[70px] focus:ring-2 focus:ring-amber-300 outline-none"
+                  />
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={addFaq}
+                className="w-full py-2.5 border-2 border-dashed border-amber-300 text-amber-700 hover:bg-amber-50 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-colors"
+              >
+                <Plus size={16} />
+                Yeni Soru Ekle
+              </button>
+            </CardContent>
+          </Card>
+
+          <Card className="border-cream shadow-sm bg-emerald-50/30">
+            <CardHeader>
+              <CardTitle className="text-emerald-900">Sonuç / Özet Bölümü</CardTitle>
+              <CardDescription>
+                Yazının sonunda vurgulu CTA kutusunda gösterilecek özet metin. Boş bırakırsanız kutu görünmez. Birden fazla paragraf için boş satır bırakın.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <textarea
+                value={formData.conclusion}
+                onChange={(e) => setFormData({ ...formData, conclusion: e.target.value })}
+                placeholder="Örn: Bu yazı bittiğinde elinizde net bir karar olmalı..."
+                className="w-full px-4 py-3 border border-emerald-200 rounded-lg text-sm min-h-[140px] focus:ring-2 focus:ring-emerald-300 outline-none bg-white"
+              />
+              <p className="text-xs text-emerald-700/70 mt-2">İpucu: Markdown link kullanabilirsiniz — <code className="bg-white px-1 rounded">[metin](/url)</code></p>
             </CardContent>
           </Card>
         </div>

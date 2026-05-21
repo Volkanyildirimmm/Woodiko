@@ -83,7 +83,7 @@ export default function HakkimizdaPage() {
             <AnimatedSection>
               <div className="space-y-4 text-wood-medium/80 leading-relaxed">
                 <p>
-                  1982 yılında Gazi Yıldırım ve Kemal Yıldırım kardeşler, Ankara&apos;nın mobilya kalbi Siteler&apos;de Yıldırım Mobilya&apos;yı kurdu. O günden bu yana tek bir prensibi benimsedik: <strong className="text-wood-dark">Her müşteri bir aile gibi özenle karşılanır.</strong>
+                  1982 yılında Gazi Yıldırım, Mustafa Yıldırım  ve Kemal Yıldırım kardeşler, Ankara&apos;nın mobilya kalbi Siteler&apos;de Yıldırım Mobilya&apos;yı kurdu. O günden bu yana tek bir prensibi benimsedik: <strong className="text-wood-dark">Her müşteri bir aile gibi özenle karşılanır.</strong>
                 </p>
                 <p>
                   40 yılı aşkın geçmişimizle Siteler&apos;deki atölyemizden; Yaşamkent, Çayyolu, Ümitköy, Bağlıca ve İncek gibi Ankara&apos;nın seçkin semtlerine uzanan projelerimizde her zaman kaliteyi ve kişisel dokunuşu öncelik haline getirdik.
