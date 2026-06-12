@@ -3,6 +3,10 @@ import { SITE_URL, SERVICES } from '@/lib/constants'
 import { PROJECTS } from '@/lib/projects'
 import { BLOG_POSTS, isPostLive } from '@/lib/blog-posts'
 
+// Saatte bir yeniden üret: planlanan yazılar tarihleri geldiğinde yeniden
+// dağıtım gerekmeden sitemap'e otomatik eklenir.
+export const revalidate = 3600
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
 
