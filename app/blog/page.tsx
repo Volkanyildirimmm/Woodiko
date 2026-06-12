@@ -8,7 +8,7 @@ import { formatDate } from '@/lib/utils'
 import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/shared/AnimatedSection'
 import { collection, getDocs, query, orderBy } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
-import { BLOG_POSTS } from '@/lib/blog-posts'
+import { BLOG_POSTS, isPostLive } from '@/lib/blog-posts'
 
 interface BlogPost {
   id: string
@@ -27,16 +27,18 @@ export default function BlogPage() {
   const [activeCategory, setActiveCategory] = useState<string>('Tümü')
 
   useEffect(() => {
-    const staticPosts: BlogPost[] = Object.entries(BLOG_POSTS).map(([slug, p]) => ({
-      id: `static-${slug}`,
-      slug,
-      title: p.title,
-      excerpt: p.excerpt,
-      coverImage: p.image,
-      category: p.category || 'Genel',
-      publishedAt: p.modified || p.date,
-      readTime: p.readTime,
-    }))
+    const staticPosts: BlogPost[] = Object.entries(BLOG_POSTS)
+      .filter(([, p]) => isPostLive(p))
+      .map(([slug, p]) => ({
+        id: `static-${slug}`,
+        slug,
+        title: p.title,
+        excerpt: p.excerpt,
+        coverImage: p.image,
+        category: p.category || 'Genel',
+        publishedAt: p.publishDate || p.modified || p.date,
+        readTime: p.readTime,
+      }))
 
     const fetchBlogs = async () => {
       try {

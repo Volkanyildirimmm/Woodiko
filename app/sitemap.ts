@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 import { SITE_URL, SERVICES } from '@/lib/constants'
 import { PROJECTS } from '@/lib/projects'
-import { BLOG_POSTS } from '@/lib/blog-posts'
+import { BLOG_POSTS, isPostLive } from '@/lib/blog-posts'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
@@ -24,12 +24,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }))
 
-  const blogPages: MetadataRoute.Sitemap = Object.entries(BLOG_POSTS).map(([slug, post]) => ({
-    url: `${SITE_URL}/blog/${slug}`,
-    lastModified: post.modified ? new Date(post.modified) : new Date(post.date),
-    changeFrequency: 'monthly' as const,
-    priority: 0.75,
-  }))
+  const blogPages: MetadataRoute.Sitemap = Object.entries(BLOG_POSTS)
+    .filter(([, post]) => isPostLive(post, now))
+    .map(([slug, post]) => ({
+      url: `${SITE_URL}/blog/${slug}`,
+      lastModified: post.modified ? new Date(post.modified) : new Date(post.date),
+      changeFrequency: 'monthly' as const,
+      priority: 0.75,
+    }))
 
   const projectPages: MetadataRoute.Sitemap = PROJECTS.map((p) => ({
     url: `${SITE_URL}/projeler/${p.slug}`,

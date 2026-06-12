@@ -10,7 +10,7 @@ import { db } from '@/lib/firebase'
 import { generateSEO, articleSchema, breadcrumbSchema } from '@/lib/seo'
 import { formatDate } from '@/lib/utils'
 import { AnimatedSection } from '@/components/shared/AnimatedSection'
-import { BLOG_POSTS } from '@/lib/blog-posts'
+import { BLOG_POSTS, isPostLive } from '@/lib/blog-posts'
 
 export const revalidate = 60
 
@@ -60,6 +60,8 @@ function toIsoDate(v: any): string {
 async function resolvePost(slug: string): Promise<ResolvedPost | null> {
   const staticPost = posts[slug]
   if (staticPost) {
+    // İleri tarihli (planlanmış) yazılar yayın tarihine kadar 404 döner
+    if (!isPostLive(staticPost)) return null
     const { main, faqs, conclusion } = parseContent(staticPost.content)
     return {
       title: staticPost.title,
@@ -114,6 +116,14 @@ async function resolvePost(slug: string): Promise<ResolvedPost | null> {
   }
 }
 
+/** Henüz yayınlanmamış (planlı) bir blog yazısına giden iç bağlantı mı? Öyleyse 404'ü önlemek için link yerine düz metin gösteririz. */
+function isScheduledBlogLink(href: string): boolean {
+  if (!href.startsWith('/blog/')) return false
+  const slug = href.slice('/blog/'.length).split(/[#?]/)[0]
+  const p = posts[slug]
+  return !!p && !isPostLive(p)
+}
+
 function renderInline(text: string): React.ReactNode {
   const tokens: React.ReactNode[] = []
   const regex = /\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*/g
@@ -126,7 +136,10 @@ function renderInline(text: string): React.ReactNode {
       const href = match[2]
       const isInternal = href.startsWith('/')
       tokens.push(
-        isInternal ? (
+        isScheduledBlogLink(href) ? (
+          // Planlı yazıya bağlantı: tarih gelene kadar düz metin (yayınlanınca otomatik link olur)
+          <span key={key++} className="font-medium text-wood-dark">{match[1]}</span>
+        ) : isInternal ? (
           <Link key={key++} href={href} className="text-gold hover:text-gold-dark underline underline-offset-2">{match[1]}</Link>
         ) : (
           <a key={key++} href={href} target="_blank" rel="noopener noreferrer" className="text-gold hover:text-gold-dark underline underline-offset-2">{match[1]}</a>
@@ -179,8 +192,104 @@ function stripInlineMarkdown(text: string): string {
   return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1').replace(/\*\*(.*?)\*\*/g, '$1')
 }
 
+function parseTableRow(row: string): string[] {
+  let s = row.trim()
+  if (s.startsWith('|')) s = s.slice(1)
+  if (s.endsWith('|')) s = s.slice(0, -1)
+  return s.split('|').map((c) => c.trim())
+}
+
+const isSeparatorRow = (cells: string[]) => cells.length > 0 && cells.every((c) => /^:?-{1,}:?$/.test(c))
+
+/** Statik (markdown) yazılar için blok-bazlı render: başlık, liste, alıntı, yatay çizgi ve TABLO desteği. */
+function renderMarkdown(md: string): React.ReactNode[] {
+  const lines = md.split('\n')
+  const nodes: React.ReactNode[] = []
+  let i = 0
+  let key = 0
+
+  while (i < lines.length) {
+    const line = lines[i]
+    const trimmed = line.trim()
+
+    // Tablo: ardışık '|' satırları
+    if (trimmed.startsWith('|')) {
+      const rows: string[][] = []
+      while (i < lines.length && lines[i].trim().startsWith('|')) {
+        rows.push(parseTableRow(lines[i]))
+        i++
+      }
+      const sepIdx = rows.findIndex(isSeparatorRow)
+      const header = sepIdx > 0 ? rows[sepIdx - 1] : rows[0]
+      const body = rows.filter((r, idx) => idx !== (sepIdx >= 0 ? sepIdx : -1) && r !== header && !isSeparatorRow(r))
+      nodes.push(
+        <div key={key++} className="overflow-x-auto my-6">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="bg-wood-dark text-cream">
+                {header.map((cell, ci) => (
+                  <th key={ci} className="px-4 py-2.5 text-left font-semibold border border-wood-medium/30">{renderInline(cell)}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {body.map((row, ri) => (
+                <tr key={ri} className="even:bg-cream/50 odd:bg-white">
+                  {row.map((cell, ci) => (
+                    <td key={ci} className="px-4 py-2 border border-cream text-wood-medium/85 align-top">{renderInline(cell)}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
+      continue
+    }
+
+    if (trimmed === '') { i++; continue }
+    if (trimmed === '---') { nodes.push(<hr key={key++} className="my-6 border-cream" />); i++; continue }
+    if (trimmed.startsWith('## ')) { nodes.push(<h2 key={key++} className="font-serif text-xl font-bold text-wood-dark mt-8 mb-3">{trimmed.replace('## ', '')}</h2>); i++; continue }
+    if (trimmed.startsWith('### ')) { nodes.push(<h3 key={key++} className="font-serif text-lg font-semibold text-wood-dark mt-6 mb-2">{trimmed.replace('### ', '')}</h3>); i++; continue }
+    if (trimmed.startsWith('> ')) { nodes.push(<blockquote key={key++} className="border-l-4 border-gold pl-4 italic text-wood-medium/80 my-4">{renderInline(trimmed.replace('> ', ''))}</blockquote>); i++; continue }
+
+    // Sırasız liste grubu
+    if (trimmed.startsWith('- ')) {
+      const items: string[] = []
+      while (i < lines.length && lines[i].trim().startsWith('- ')) { items.push(lines[i].trim().slice(2)); i++ }
+      nodes.push(
+        <ul key={key++} className="list-disc ml-6 space-y-1.5 my-3 text-wood-medium/80">
+          {items.map((it, ii) => <li key={ii}>{renderInline(it)}</li>)}
+        </ul>
+      )
+      continue
+    }
+
+    // Sıralı liste grubu
+    if (/^\d+\.\s/.test(trimmed)) {
+      const items: string[] = []
+      while (i < lines.length && /^\d+\.\s/.test(lines[i].trim())) { items.push(lines[i].trim().replace(/^\d+\.\s/, '')); i++ }
+      nodes.push(
+        <ol key={key++} className="list-decimal ml-6 space-y-1.5 my-3 text-wood-medium/80">
+          {items.map((it, ii) => <li key={ii}>{renderInline(it)}</li>)}
+        </ol>
+      )
+      continue
+    }
+
+    nodes.push(<p key={key++} className="text-wood-medium/80 leading-relaxed">{renderInline(trimmed)}</p>)
+    i++
+  }
+
+  return nodes
+}
+
 export function generateStaticParams() {
-  return Object.keys(posts).map((slug) => ({ slug }))
+  // Yalnızca yayında olan yazıları önceden üret; planlanmış (ileri tarihli)
+  // yazılar tarihleri geldiğinde isteğe bağlı (on-demand) render edilir.
+  return Object.entries(posts)
+    .filter(([, p]) => isPostLive(p))
+    .map(([slug]) => ({ slug }))
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
@@ -217,7 +326,6 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   const faqs = post.faqs
   const conclusion = post.conclusion
-  const contentLines = post.source === 'static' ? post.rawContent.split('\n') : []
 
   const faqSchema = faqs.length > 0 ? {
     '@context': 'https://schema.org',
@@ -287,18 +395,8 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                 </div>
 
                 {post.source === 'static' ? (
-                  <div className="prose prose-sm max-w-none text-wood-dark/80 leading-relaxed space-y-4">
-                    {contentLines.map((line, i) => {
-                      if (line.startsWith('## ')) return <h2 key={i} className="font-serif text-xl font-bold text-wood-dark mt-8 mb-3">{line.replace('## ', '')}</h2>
-                      if (line.startsWith('### ')) return <h3 key={i} className="font-serif text-lg font-semibold text-wood-dark mt-6 mb-2">{line.replace('### ', '')}</h3>
-                      if (line.trim() === '---') return <hr key={i} className="my-6 border-cream" />
-                      if (line.startsWith('> ')) return <blockquote key={i} className="border-l-4 border-gold pl-4 italic text-wood-medium/80 my-4">{renderInline(line.replace('> ', ''))}</blockquote>
-                      if (line.startsWith('- ')) return <li key={i} className="ml-4 text-wood-medium/80">{renderInline(line.replace('- ', ''))}</li>
-                      if (line.startsWith('1. ') || line.startsWith('2. ') || /^\d+\. /.test(line)) return <li key={i} className="ml-4 text-wood-medium/80">{renderInline(line.replace(/^\d+\. /, ''))}</li>
-                      if (line.trim() === '') return null
-                      if (line.startsWith('|')) return null
-                      return <p key={i} className="text-wood-medium/80 leading-relaxed">{renderInline(line)}</p>
-                    })}
+                  <div className="max-w-none text-wood-dark/80 leading-relaxed">
+                    {renderMarkdown(post.rawContent)}
                   </div>
                 ) : (
                   <div
@@ -410,13 +508,13 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                     Teklif Al
                   </Link>
                 </div>
-                {post.related.length > 0 && (
+                {post.related.some((slug) => posts[slug] && isPostLive(posts[slug])) && (
                   <div>
                     <h3 className="font-semibold text-wood-dark text-sm mb-3">İlgili Yazılar</h3>
                     <div className="space-y-3">
                       {post.related.map((slug) => {
                         const rel = posts[slug]
-                        if (!rel) return null
+                        if (!rel || !isPostLive(rel)) return null
                         return (
                           <Link key={slug} href={`/blog/${slug}`} className="flex gap-3 group">
                             <Image src={rel.image} alt={rel.title} width={60} height={60} className="rounded-lg object-cover shrink-0 w-14 h-14" />

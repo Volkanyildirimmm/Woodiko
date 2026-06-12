@@ -1,3 +1,4 @@
+import { EXTRA_POSTS } from './blog-posts-extra'
 export interface BlogPostData {
   title: string
   excerpt: string
@@ -5,6 +6,8 @@ export interface BlogPostData {
   category: string
   date: string
   modified?: string
+  /** Yayın tarihi (ISO). İleri tarihliyse yazı bu tarihe kadar listede, detayda ve sitemap'te gizlenir. Yoksa her zaman yayında sayılır. */
+  publishDate?: string
   readTime: string
   author: string
   authorImage: string
@@ -13,7 +16,15 @@ export interface BlogPostData {
   keywords?: string[]
 }
 
-export const BLOG_POSTS: Record<string, BlogPostData> = {
+/** Yazı şu an yayında mı? publishDate yoksa veya geçmişse true. */
+export function isPostLive(post: Pick<BlogPostData, 'publishDate'>, now: Date = new Date()): boolean {
+  if (!post.publishDate) return true
+  const d = new Date(post.publishDate)
+  if (isNaN(d.getTime())) return true
+  return d.getTime() <= now.getTime()
+}
+
+const CORE_POSTS: Record<string, BlogPostData> = {
   'ankara-mutfak-dolabi-fiyatlari-2024': {
     title: 'Ankara\'da Mutfak Dolabı Fiyatları: 2026 Kapsamlı Rehber',
     excerpt:
@@ -941,3 +952,5 @@ Bu yazı bittiğinde elinizde net bir karar olmalı: gövdeniz sağlamsa ve plan
     `,
   },
 }
+
+export const BLOG_POSTS: Record<string, BlogPostData> = { ...CORE_POSTS, ...EXTRA_POSTS }
